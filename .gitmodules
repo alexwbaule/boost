@@ -1,0 +1,3 @@
+[submodule "cmake"]
+	path = cmake
+	url = git@gitee.com:zeng_gui/cmake.git
