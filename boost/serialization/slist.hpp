@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // slist.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -29,8 +29,9 @@
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/detail/stack_constructor.hpp>
 #include <boost/serialization/detail/is_default_constructible.hpp>
+#include <boost/move/utility_core.hpp>
 
-namespace boost { 
+namespace boost {
 namespace serialization {
 
 template<class Archive, class U, class Allocator>
@@ -41,7 +42,7 @@ inline void save(
 ){
     boost::serialization::stl::save_collection<
         Archive,
-        BOOST_STD_EXTENSION_NAMESPACE::slist<U, Allocator> 
+        BOOST_STD_EXTENSION_NAMESPACE::slist<U, Allocator>
     >(ar, t);
 }
 
@@ -67,14 +68,14 @@ collection_load_impl(
     t.clear();
     boost::serialization::detail::stack_construct<Archive, T> u(ar, item_version);
     ar >> boost::serialization::make_nvp("item", u.reference());
-    t.push_front(u.reference());
+    t.push_front(boost::move(u.reference()));
     typename BOOST_STD_EXTENSION_NAMESPACE::slist<T, Allocator>::iterator last;
     last = t.begin();
     ar.reset_object_address(&(*t.begin()) , & u.reference());
     while(--count > 0){
         detail::stack_construct<Archive, T> u(ar, item_version);
         ar >> boost::serialization::make_nvp("item", u.reference());
-        last = t.insert_after(last, u.reference());
+        last = t.insert_after(last, boost::move(u.reference()));
         ar.reset_object_address(&(*last) , & u.reference());
     }
 }
@@ -109,14 +110,14 @@ inline void load(
         t.clear();
         boost::serialization::detail::stack_construct<Archive, U> u(ar, item_version);
         ar >> boost::serialization::make_nvp("item", u.reference());
-        t.push_front(u.reference());
+        t.push_front(boost::move(u.reference()));
         typename BOOST_STD_EXTENSION_NAMESPACE::slist<U, Allocator>::iterator last;
         last = t.begin();
         ar.reset_object_address(&(*t.begin()) , & u.reference());
         while(--count > 0){
             detail::stack_construct<Archive, U> u(ar, item_version);
             ar >> boost::serialization::make_nvp("item", u.reference());
-            last = t.insert_after(last, u.reference());
+            last = t.insert_after(last, boost::move(u.reference()));
             ar.reset_object_address(&(*last) , & u.reference());
         }
     }

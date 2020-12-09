@@ -1,0 +1,10 @@
+add_definitions(-DBOOST_LOG_SOURCE)
+add_definitions(-DBOOST_ALL_NO_LIB)
+add_definitions(-DBOOST_LOG_BUILDING_THE_LIB)
+add_definitions(-DBOOST_LOG_DLL)
+add_definitions(-DBOOST_LOG_SETUP_BUILDING_THE_LIB)
+add_definitions(-DBOOST_LOG_SETUP_DLL)
+add_definitions(-DSECURITY_WIN32)
+__add_boost_target(log)
+
+target_link_libraries(boost_log PRIVATE boost_file_system boost_regex boost_thread Secur32.lib)
