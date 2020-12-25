@@ -1,0 +1,3 @@
+add_definitions(-DBOOST_ALL_NO_LIB)
+add_definitions(-DBOOST_THREAD_BUILD_DLL)
+__add_boost_target(thread)
