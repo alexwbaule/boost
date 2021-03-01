@@ -1,0 +1,3 @@
+add_definitions(-DBOOST_ALL_NO_LIB)
+add_definitions(-DBOOST_FILESYSTEM_SOURCE)
+__add_boost_target(nowide)
