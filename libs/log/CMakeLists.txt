@@ -65,6 +65,7 @@ if(WIN32)
 	list(APPEND LIBS Secur32.lib)
 	list(APPEND DEFS SECURITY_WIN32)
 else()
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx2 -mssse3")
 endif()
 
 __add_real_target(boost_log dll SOURCE ${SRC}
