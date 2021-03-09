@@ -65,9 +65,6 @@ if(WIN32)
 	list(APPEND LIBS Secur32.lib)
 	list(APPEND DEFS SECURITY_WIN32)
 else()
-	list(APPEND SRC pthread/once.cpp
-					pthread/thread.cpp
-					)
 endif()
 
 __add_real_target(boost_log dll SOURCE ${SRC}
