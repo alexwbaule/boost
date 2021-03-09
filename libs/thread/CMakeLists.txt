@@ -13,7 +13,6 @@ if(WIN32)
 					)
 else()
 	list(APPEND SRC pthread/once.cpp
-					pthread/once_atomic.cpp
 					pthread/thread.cpp
 					)
 endif()
