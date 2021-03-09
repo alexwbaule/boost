@@ -30,7 +30,7 @@ if(WIN32)
 					win32/win_backend.cpp
 					)
 else()
-	add_compile_definitions(-DBOOST_LOCALE_WITH_ICONV)
+	add_definitions(-DBOOST_LOCALE_WITH_ICONV)
 endif()
 
 __add_real_target(boost_locale dll SOURCE ${SRC}
