@@ -20,15 +20,14 @@ set(SRC encoding/codepage.cpp
 		util/gregorian.cpp
 		util/info.cpp
 		util/locale_data.cpp
+		win32/collate.cpp
+		win32/converter.cpp
+		win32/lcid.cpp
+		win32/numeric.cpp
+		win32/win_backend.cpp
 		)
 		
 if(WIN32)
-	list(APPEND SRC win32/collate.cpp
-					win32/converter.cpp
-					win32/lcid.cpp
-					win32/numeric.cpp
-					win32/win_backend.cpp
-					)
 else()
 	add_definitions(-DBOOST_LOCALE_WITH_ICONV)
 endif()
