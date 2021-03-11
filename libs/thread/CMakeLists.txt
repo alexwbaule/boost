@@ -21,3 +21,10 @@ __add_real_target(boost_thread dll SOURCE ${SRC}
 									  INC ${CMAKE_CURRENT_SOURCE_DIR}/../../
 									  DEF BOOST_ALL_DYN_LINK
 									  INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../)
+									  
+if(INSTALL_BOOST)
+	INSTALL(TARGETS boost_thread
+				LIBRARY DESTINATION lib
+				ARCHIVE DESTINATION .
+				RUNTIME DESTINATION bin)
+endif()

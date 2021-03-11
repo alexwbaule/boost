@@ -73,3 +73,10 @@ __add_real_target(boost_log dll SOURCE ${SRC}
 									  DEF ${DEFS} BOOST_ALL_DYN_LINK
 									  LIB ${LIBS}
 									  INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../)
+									  
+if(INSTALL_BOOST)
+	INSTALL(TARGETS boost_log
+				LIBRARY DESTINATION lib
+				ARCHIVE DESTINATION .
+				RUNTIME DESTINATION bin)
+endif()
