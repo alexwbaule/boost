@@ -1,6 +1,10 @@
-set(boost_includes ${CMAKE_CURRENT_SOURCE_DIR}/../)
-include_directories(${boost_includes})
-add_definitions(-DBOOST_ALL_DYN_LINK)
-
-add_subdirectory(chrono)
-add_subdirectory(system)
+if(INSTALL_BOOST_INCLUDES)
+	INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../boost DESTINATION include/ FILES_MATCHING PATTERN "*.hpp")
+	INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../boost DESTINATION include/ FILES_MATCHING PATTERN "*.h")
+else()
+	set(boost_includes ${CMAKE_CURRENT_SOURCE_DIR}/../)
+	include_directories(${boost_includes})
+	add_definitions(-DBOOST_ALL_DYN_LINK)
+	
+	__add_all_directory()
+endif()
