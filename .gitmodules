@@ -1,4 +1,1 @@
 
-[submodule "cmake"]
-	path = cmake
-	url = ssh://git@172.20.180.12:8022/yanfa4/shared/cmake.git
