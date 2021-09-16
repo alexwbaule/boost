@@ -1,4 +1,4 @@
-if(WIN32)
+#if(WIN32)
 add_definitions(-DBOOST_ALL_NO_LIB)
 add_definitions(-DBOOST_LOCALE_NO_POSIX_BACKEND)
 
@@ -46,4 +46,4 @@ if(INSTALL_BOOST)
 				ARCHIVE DESTINATION .
 				RUNTIME DESTINATION bin)
 endif()
-endif()
+#endif()
