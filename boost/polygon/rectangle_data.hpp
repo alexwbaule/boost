@@ -23,13 +23,13 @@ public:
   inline rectangle_data(T xl, T yl, T xh, T yh):ranges_() {
     if(xl > xh) std::swap(xl, xh);
     if(yl > yh) std::swap(yl, yh);
-    ranges_[HORIZONTAL] = interval_data<T>(xl, xh);
-    ranges_[VERTICAL] = interval_data<T>(yl, yh);
+    ranges_[HORIZONTAL_] = interval_data<T>(xl, xh);
+    ranges_[VERTICAL_] = interval_data<T>(yl, yh);
   }
   template <typename interval_type_1, typename interval_type_2>
   inline rectangle_data(const interval_type_1& hrange,
                         const interval_type_2& vrange):ranges_() {
-    set(HORIZONTAL, hrange); set(VERTICAL, vrange); }
+    set(HORIZONTAL_, hrange); set(VERTICAL_, vrange); }
 
   inline rectangle_data(const rectangle_data& that):ranges_() { (*this) = that; }
   inline rectangle_data& operator=(const rectangle_data& that) {

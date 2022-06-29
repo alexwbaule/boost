@@ -165,8 +165,8 @@ typename enable_if<
     >::type
 >::type,
 PointType1>::type& assign(PointType1& lvalue, const PointType2& rvalue) {
-  set(lvalue, HORIZONTAL, get(rvalue, HORIZONTAL));
-  set(lvalue, VERTICAL, get(rvalue, VERTICAL));
+  set(lvalue, HORIZONTAL_, get(rvalue, HORIZONTAL_));
+  set(lvalue, VERTICAL_, get(rvalue, VERTICAL_));
   return lvalue;
 }
 
@@ -182,7 +182,7 @@ typename enable_if<
   >::type,
   typename point_coordinate_type<PointType>::type
 >::type x(const PointType& point) {
-  return get(point, HORIZONTAL);
+  return get(point, HORIZONTAL_);
 }
 
 struct y_p_y : gtl_yes {};
@@ -197,7 +197,7 @@ typename enable_if<
   >::type,
   typename point_coordinate_type<PointType>::type
 >::type y(const PointType& point) {
-  return get(point, VERTICAL);
+  return get(point, VERTICAL_);
 }
 
 struct y_p_sx : gtl_yes {};
@@ -212,7 +212,7 @@ typename enable_if<
   >::type,
 void>::type x(PointType& point,
     typename point_mutable_traits<PointType>::coordinate_type value) {
-  set(point, HORIZONTAL, value);
+  set(point, HORIZONTAL_, value);
 }
 
 struct y_p_sy : gtl_yes {};
@@ -227,7 +227,7 @@ typename enable_if<
   >::type,
 void>::type y(PointType& point,
     typename point_mutable_traits<PointType>::coordinate_type value) {
-  set(point, VERTICAL, value);
+  set(point, VERTICAL_, value);
 }
 
 struct y_pt_equiv : gtl_yes {};
@@ -263,8 +263,8 @@ typename enable_if<
   >::type,
 typename point_difference_type<PointType1>::type>::type
 manhattan_distance(const PointType1& point1, const PointType2& point2) {
-  return euclidean_distance(point1, point2, HORIZONTAL) +
-         euclidean_distance(point1, point2, VERTICAL);
+  return euclidean_distance(point1, point2, HORIZONTAL_) +
+         euclidean_distance(point1, point2, VERTICAL_);
 }
 
 struct y_pt_ed1 : gtl_yes {};
@@ -306,9 +306,9 @@ typename enable_if<
 typename point_difference_type<PointType1>::type>::type
 distance_squared(const PointType1& point1, const PointType2& point2) {
   typename point_difference_type<PointType1>::type dx =
-      euclidean_distance(point1, point2, HORIZONTAL);
+      euclidean_distance(point1, point2, HORIZONTAL_);
   typename point_difference_type<PointType1>::type dy =
-      euclidean_distance(point1, point2, VERTICAL);
+      euclidean_distance(point1, point2, VERTICAL_);
   dx *= dx;
   dy *= dy;
   return dx + dy;

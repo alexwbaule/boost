@@ -98,7 +98,7 @@ namespace boost { namespace polygon{
   typename enable_if< typename gtl_and<y_r_h, typename is_rectangle_concept<typename geometry_concept<T>::type>::type>::type,
                        typename rectangle_interval_type<T>::type>::type
   horizontal(const T& rectangle) {
-    return rectangle_traits<T>::get(rectangle, HORIZONTAL);
+    return rectangle_traits<T>::get(rectangle, HORIZONTAL_);
   }
 
   struct y_r_v : gtl_yes {};
@@ -107,7 +107,7 @@ namespace boost { namespace polygon{
   typename enable_if< typename gtl_and<y_r_v, typename is_rectangle_concept<typename geometry_concept<T>::type>::type>::type,
                        typename rectangle_interval_type<T>::type>::type
   vertical(const T& rectangle) {
-    return rectangle_traits<T>::get(rectangle, VERTICAL);
+    return rectangle_traits<T>::get(rectangle, VERTICAL_);
   }
 
   struct y_r_set : gtl_yes {};
@@ -137,7 +137,7 @@ namespace boost { namespace polygon{
                                         typename is_interval_concept<typename geometry_concept<T2>::type>::type>::type,
                        void>::type
   horizontal(T& rectangle, const T2& interval) {
-    rectangle_mutable_traits<T>::set(rectangle, HORIZONTAL, interval);
+    rectangle_mutable_traits<T>::set(rectangle, HORIZONTAL_, interval);
   }
 
   struct y_r_v2 : gtl_yes {};
@@ -147,7 +147,7 @@ namespace boost { namespace polygon{
     typename gtl_and_3<y_r_v2, typename is_mutable_rectangle_concept<typename geometry_concept<T>::type>::type,
                      typename is_interval_concept<typename geometry_concept<T2>::type>::type>::type, void>::type
   vertical(T& rectangle, const T2& interval) {
-    rectangle_mutable_traits<T>::set(rectangle, VERTICAL, interval);
+    rectangle_mutable_traits<T>::set(rectangle, VERTICAL_, interval);
   }
 
   struct y_r_construct : gtl_yes {};
@@ -178,7 +178,7 @@ namespace boost { namespace polygon{
       typename is_rectangle_concept<typename geometry_concept<T2>::type>::type>::type,
     T>::type
   copy_construct(const T2& rectangle) {
-    return construct<T> (get(rectangle, HORIZONTAL), get(rectangle, VERTICAL));
+    return construct<T> (get(rectangle, HORIZONTAL_), get(rectangle, VERTICAL_));
   }
 
   struct y_r_assign : gtl_yes {};
@@ -190,8 +190,8 @@ namespace boost { namespace polygon{
       typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
     rectangle_type_1>::type &
   assign(rectangle_type_1& lvalue, const rectangle_type_2& rvalue) {
-    set(lvalue, HORIZONTAL, get(rvalue, HORIZONTAL));
-    set(lvalue, VERTICAL, get(rvalue, VERTICAL));
+    set(lvalue, HORIZONTAL_, get(rvalue, HORIZONTAL_));
+    set(lvalue, VERTICAL_, get(rvalue, VERTICAL_));
     return lvalue;
   }
 
@@ -204,8 +204,8 @@ namespace boost { namespace polygon{
       typename is_rectangle_concept<typename geometry_concept<T2>::type>::type>::type,
     bool>::type
   equivalence(const T& rect1, const T2& rect2) {
-    return equivalence(get(rect1, HORIZONTAL), get(rect2, HORIZONTAL)) &&
-      equivalence(get(rect1, VERTICAL), get(rect2, VERTICAL));
+    return equivalence(get(rect1, HORIZONTAL_), get(rect2, HORIZONTAL_)) &&
+      equivalence(get(rect1, VERTICAL_), get(rect2, VERTICAL_));
   }
 
   struct y_r_get : gtl_yes {};
@@ -234,7 +234,7 @@ namespace boost { namespace polygon{
   typename enable_if< typename gtl_and<y_r_xl, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                        typename rectangle_coordinate_type<rectangle_type>::type>::type
   xl(const rectangle_type& rectangle) {
-    return get(rectangle, HORIZONTAL, LOW);
+    return get(rectangle, HORIZONTAL_, LOW);
   }
 
   struct y_r_xl2 : gtl_yes {};
@@ -242,7 +242,7 @@ namespace boost { namespace polygon{
   template <typename rectangle_type>
   typename enable_if<typename gtl_and<y_r_xl2, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, void>::type
       xl(rectangle_type& rectangle, typename rectangle_coordinate_type<rectangle_type>::type value) {
-    return set(rectangle, HORIZONTAL, LOW, value);
+    return set(rectangle, HORIZONTAL_, LOW, value);
   }
 
   struct y_r_xh : gtl_yes {};
@@ -251,7 +251,7 @@ namespace boost { namespace polygon{
   typename enable_if< typename gtl_and<y_r_xh, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                        typename rectangle_coordinate_type<rectangle_type>::type>::type
   xh(const rectangle_type& rectangle) {
-    return get(rectangle, HORIZONTAL, HIGH);
+    return get(rectangle, HORIZONTAL_, HIGH);
   }
 
   struct y_r_xh2 : gtl_yes {};
@@ -259,7 +259,7 @@ namespace boost { namespace polygon{
   template <typename rectangle_type>
   typename enable_if<typename gtl_and<y_r_xh2, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, void>::type
   xh(rectangle_type& rectangle, typename rectangle_coordinate_type<rectangle_type>::type value) {
-    return set(rectangle, HORIZONTAL, HIGH, value);
+    return set(rectangle, HORIZONTAL_, HIGH, value);
   }
 
   struct y_r_yl : gtl_yes {};
@@ -268,7 +268,7 @@ namespace boost { namespace polygon{
   typename enable_if< typename gtl_and<y_r_yl, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                        typename rectangle_coordinate_type<rectangle_type>::type>::type
   yl(const rectangle_type& rectangle) {
-    return get(rectangle, VERTICAL, LOW);
+    return get(rectangle, VERTICAL_, LOW);
   }
 
   struct y_r_yl2 : gtl_yes {};
@@ -276,7 +276,7 @@ namespace boost { namespace polygon{
   template <typename rectangle_type>
   typename enable_if<typename gtl_and<y_r_yl2, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, void>::type
       yl(rectangle_type& rectangle, typename rectangle_coordinate_type<rectangle_type>::type value) {
-    return set(rectangle, VERTICAL, LOW, value);
+    return set(rectangle, VERTICAL_, LOW, value);
   }
 
   struct y_r_yh : gtl_yes {};
@@ -285,7 +285,7 @@ namespace boost { namespace polygon{
   typename enable_if< typename gtl_and<y_r_yh, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                        typename rectangle_coordinate_type<rectangle_type>::type>::type
   yh(const rectangle_type& rectangle) {
-    return get(rectangle, VERTICAL, HIGH);
+    return get(rectangle, VERTICAL_, HIGH);
   }
 
   struct y_r_yh2 : gtl_yes {};
@@ -293,7 +293,7 @@ namespace boost { namespace polygon{
   template <typename rectangle_type>
   typename enable_if<typename gtl_and<y_r_yh2, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, void>::type
       yh(rectangle_type& rectangle, typename rectangle_coordinate_type<rectangle_type>::type value) {
-    return set(rectangle, VERTICAL, HIGH, value);
+    return set(rectangle, VERTICAL_, HIGH, value);
   }
 
   struct y_r_ll : gtl_yes {};
@@ -505,7 +505,7 @@ namespace boost { namespace polygon{
                        typename coordinate_traits<typename rectangle_coordinate_type<rectangle_type>::type>::manhattan_area_type>::type
   area(const rectangle_type& rectangle) {
     typedef typename coordinate_traits<typename rectangle_coordinate_type<rectangle_type>::type>::manhattan_area_type area_type;
-    return (area_type)delta(rectangle, HORIZONTAL) * (area_type)delta(rectangle, VERTICAL);
+    return (area_type)delta(rectangle, HORIZONTAL_) * (area_type)delta(rectangle, VERTICAL_);
   }
 
   struct y_r_go : gtl_yes {};
@@ -515,8 +515,8 @@ namespace boost { namespace polygon{
   typename enable_if<typename gtl_and<y_r_go, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                       orientation_2d>::type
   guess_orientation(const rectangle_type& rectangle) {
-    return delta(rectangle, HORIZONTAL) >= delta(rectangle, VERTICAL) ?
-      HORIZONTAL : VERTICAL;
+    return delta(rectangle, HORIZONTAL_) >= delta(rectangle, VERTICAL_) ?
+      HORIZONTAL_ : VERTICAL_;
   }
 
   struct y_r_half_p : gtl_yes {};
@@ -526,7 +526,7 @@ namespace boost { namespace polygon{
   typename enable_if< typename gtl_and<y_r_half_p, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                        typename rectangle_difference_type<rectangle_type>::type>::type
   half_perimeter(const rectangle_type& rectangle) {
-    return delta(rectangle, HORIZONTAL) + delta(rectangle, VERTICAL);
+    return delta(rectangle, HORIZONTAL_) + delta(rectangle, VERTICAL_);
   }
 
   struct y_r_perimeter : gtl_yes {};
@@ -613,7 +613,7 @@ namespace boost { namespace polygon{
                                          typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
                        bool>::type
   abuts(const rectangle_type_1& rectangle, const rectangle_type_2& b) {
-    return abuts(rectangle, b, HORIZONTAL) || abuts(rectangle, b, VERTICAL);
+    return abuts(rectangle, b, HORIZONTAL_) || abuts(rectangle, b, VERTICAL_);
   }
 
   struct y_r_b_intersect2 : gtl_yes {};
@@ -643,8 +643,8 @@ namespace boost { namespace polygon{
                        bool>::type
   intersect(rectangle_type_1& rectangle, const rectangle_type_2& b, bool consider_touch = true) {
     if(intersects(rectangle, b)) {
-      intersect(rectangle, horizontal(b), HORIZONTAL, consider_touch);
-      intersect(rectangle, vertical(b), VERTICAL, consider_touch);
+      intersect(rectangle, horizontal(b), HORIZONTAL_, consider_touch);
+      intersect(rectangle, vertical(b), VERTICAL_, consider_touch);
       return true;
     }
     return false;
@@ -659,7 +659,7 @@ namespace boost { namespace polygon{
     typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
                        rectangle_type_1>::type &
   generalized_intersect(rectangle_type_1& rectangle, const rectangle_type_2& b) {
-    typename rectangle_interval_type<rectangle_type_1>::type ivl = get(rectangle, HORIZONTAL);
+    typename rectangle_interval_type<rectangle_type_1>::type ivl = get(rectangle, HORIZONTAL_);
     generalized_intersect(ivl, horizontal(b));
     horizontal(rectangle, ivl);
     ivl = vertical(rectangle);
@@ -690,8 +690,8 @@ namespace boost { namespace polygon{
                       rectangle_type>::type &
   bloat(rectangle_type& rectangle,
         typename rectangle_coordinate_type<rectangle_type>::type bloating) {
-    bloat(rectangle, HORIZONTAL, bloating);
-    return bloat(rectangle, VERTICAL, bloating);
+    bloat(rectangle, HORIZONTAL_, bloating);
+    return bloat(rectangle, VERTICAL_, bloating);
   }
 
   struct y_r_bloat3 : gtl_yes {};
@@ -770,8 +770,8 @@ namespace boost { namespace polygon{
       bool>::type
   encompass(rectangle_type_1& rectangle, const rectangle_type_2& b) {
     //note that operator | is intentional because both should be called regardless
-    return encompass(rectangle, horizontal(b), HORIZONTAL) |
-      encompass(rectangle, vertical(b), VERTICAL);
+    return encompass(rectangle, horizontal(b), HORIZONTAL_) |
+      encompass(rectangle, vertical(b), VERTICAL_);
   }
 
   struct y_r_encompass3 : gtl_yes {};
@@ -846,9 +846,9 @@ namespace boost { namespace polygon{
   join_with(rectangle_type_1& rectangle, const rectangle_type_2& b) {
     typedef typename rectangle_interval_type<rectangle_type_1>::type Interval1;
     typedef typename rectangle_interval_type<rectangle_type_2>::type Interval2;
-    Interval1 hi1 = get(rectangle, HORIZONTAL);
-    Interval1 vi1 = get(rectangle, VERTICAL);
-    Interval2 hi2 = get(b, HORIZONTAL), vi2 = get(b, VERTICAL);
+    Interval1 hi1 = get(rectangle, HORIZONTAL_);
+    Interval1 vi1 = get(rectangle, VERTICAL_);
+    Interval2 hi2 = get(b, HORIZONTAL_), vi2 = get(b, VERTICAL_);
     Interval1 temp;
     if (equivalence(hi1, hi2) && join_with(vi1, vi2)) {
       vertical(rectangle, vi1);
@@ -893,8 +893,8 @@ namespace boost { namespace polygon{
                        typename rectangle_difference_type<rectangle_type>::type>::type
   square_euclidean_distance(rectangle_type& lvalue, const point_type& rvalue) {
     typename coordinate_traits<typename rectangle_coordinate_type<rectangle_type>::type>::coordinate_difference xdist, ydist;
-    xdist = euclidean_distance(lvalue, rvalue, HORIZONTAL);
-    ydist = euclidean_distance(lvalue, rvalue, VERTICAL);
+    xdist = euclidean_distance(lvalue, rvalue, HORIZONTAL_);
+    ydist = euclidean_distance(lvalue, rvalue, VERTICAL_);
     return (xdist * xdist) + (ydist * ydist);
   }
 
@@ -907,8 +907,8 @@ namespace boost { namespace polygon{
     typename rectangle_difference_type<rectangle_type>::type>::type
   square_euclidean_distance(const rectangle_type& lvalue, const rectangle_type_2& rvalue) {
     typename coordinate_traits<typename rectangle_coordinate_type<rectangle_type>::type>::coordinate_difference xdist, ydist;
-    xdist = euclidean_distance(lvalue, rvalue, HORIZONTAL);
-    ydist = euclidean_distance(lvalue, rvalue, VERTICAL);
+    xdist = euclidean_distance(lvalue, rvalue, HORIZONTAL_);
+    ydist = euclidean_distance(lvalue, rvalue, VERTICAL_);
     return (xdist * xdist) + (ydist * ydist);
   }
 
@@ -942,8 +942,8 @@ namespace boost { namespace polygon{
     typename rectangle_difference_type<rectangle_type>::type>::type
   manhattan_distance(rectangle_type& lvalue, const point_type& rvalue) {
     typename coordinate_traits<typename rectangle_coordinate_type<rectangle_type>::type>::coordinate_difference xdist, ydist;
-    xdist = euclidean_distance(lvalue, rvalue, HORIZONTAL);
-    ydist = euclidean_distance(lvalue, rvalue, VERTICAL);
+    xdist = euclidean_distance(lvalue, rvalue, HORIZONTAL_);
+    ydist = euclidean_distance(lvalue, rvalue, VERTICAL_);
     return xdist + ydist;
   }
 
@@ -956,8 +956,8 @@ namespace boost { namespace polygon{
     typename rectangle_difference_type<rectangle_type>::type>::type
   manhattan_distance(const rectangle_type& lvalue, const rectangle_type_2& rvalue) {
     typename coordinate_traits<typename rectangle_coordinate_type<rectangle_type>::type>::coordinate_difference xdist, ydist;
-    xdist = euclidean_distance(lvalue, rvalue, HORIZONTAL);
-    ydist = euclidean_distance(lvalue, rvalue, VERTICAL);
+    xdist = euclidean_distance(lvalue, rvalue, HORIZONTAL_);
+    ydist = euclidean_distance(lvalue, rvalue, VERTICAL_);
     return xdist + ydist;
   }
 
@@ -1022,7 +1022,7 @@ namespace boost { namespace polygon{
   private:
     orientation_2d orient_;
   public:
-    inline less_rectangle_concept(orientation_2d orient = VERTICAL) : orient_(orient) {}
+    inline less_rectangle_concept(orientation_2d orient = VERTICAL_) : orient_(orient) {}
     typename enable_if<
       typename gtl_and< typename is_rectangle_concept<typename geometry_concept<rectangle_type_1>::type>::type,
                         typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,

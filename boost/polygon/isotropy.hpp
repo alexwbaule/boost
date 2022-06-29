@@ -331,7 +331,8 @@ namespace boost { namespace polygon{
                            CLOCKWISE = 0, COUNTERCLOCKWISE = 1,
                            REVERSE = 0, FORWARD = 1,
                            NEGATIVE = 0, POSITIVE = 1 };
-  enum orientation_2d_enum { HORIZONTAL = 0, VERTICAL = 1 };
+
+  enum orientation_2d_enum { HORIZONTAL_ = 0, VERTICAL_ = 1 };
   enum direction_2d_enum { WEST = 0, EAST = 1, SOUTH = 2, NORTH = 3 };
   enum orientation_3d_enum { PROXIMAL = 2 };
   enum direction_3d_enum { DOWN = 4, UP = 5 };
@@ -371,7 +372,7 @@ namespace boost { namespace polygon{
     unsigned int val_;
     explicit inline orientation_2d(int o);
   public:
-    inline orientation_2d() : val_(HORIZONTAL) {}
+    inline orientation_2d() : val_(HORIZONTAL_) {}
     inline orientation_2d(const orientation_2d& ori) : val_(ori.val_) {}
     inline orientation_2d(const orientation_2d_enum val) : val_(val) {}
     explicit inline orientation_2d(const direction_2d& that);
@@ -454,7 +455,7 @@ namespace boost { namespace polygon{
     unsigned int val_;
     explicit inline orientation_3d(int o);
   public:
-    inline orientation_3d() : val_((int)HORIZONTAL) {}
+    inline orientation_3d() : val_((int)HORIZONTAL_) {}
     inline orientation_3d(const orientation_3d& ori) : val_(ori.val_) {}
     inline orientation_3d(orientation_2d ori) : val_(ori.to_int()) {}
     inline orientation_3d(const orientation_3d_enum val) : val_(val) {}

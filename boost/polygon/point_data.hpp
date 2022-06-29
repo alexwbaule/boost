@@ -30,8 +30,8 @@ class point_data {
   {}
 
   point_data(coordinate_type x, coordinate_type y) {
-    coords_[HORIZONTAL] = x;
-    coords_[VERTICAL] = y;
+    coords_[HORIZONTAL_] = x;
+    coords_[VERTICAL_] = y;
   }
 
   explicit point_data(const point_data& that) {
@@ -67,8 +67,8 @@ class point_data {
   // TODO(asydorchuk): Deprecated.
   template <typename CT>
   point_data(const point_data<CT>& that) {
-    coords_[HORIZONTAL] = (coordinate_type)that.x();
-    coords_[VERTICAL] = (coordinate_type)that.y();
+    coords_[HORIZONTAL_] = (coordinate_type)that.x();
+    coords_[VERTICAL_] = (coordinate_type)that.y();
   }
 
   coordinate_type get(orientation_2d orient) const {
@@ -80,20 +80,20 @@ class point_data {
   }
 
   coordinate_type x() const {
-    return coords_[HORIZONTAL];
+    return coords_[HORIZONTAL_];
   }
 
   point_data& x(coordinate_type value) {
-    coords_[HORIZONTAL] = value;
+    coords_[HORIZONTAL_] = value;
     return *this;
   }
 
   coordinate_type y() const {
-    return coords_[VERTICAL];
+    return coords_[VERTICAL_];
   }
 
   point_data& y(coordinate_type value) {
-    coords_[VERTICAL] = value;
+    coords_[VERTICAL_] = value;
     return *this;
   }
 
