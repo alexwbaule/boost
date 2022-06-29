@@ -126,7 +126,7 @@ namespace boost { namespace polygon{
 
     template <typename coordinate_type_2>
     inline void insert(const polygon_90_set_data<coordinate_type_2>& polygon_set, bool is_hole = false) {
-      if(polygon_set.orient() == VERTICAL) {
+      if(polygon_set.orient() == VERTICAL_) {
         for(typename polygon_90_set_data<coordinate_type_2>::iterator_type itr = polygon_set.begin();
             itr != polygon_set.end(); ++itr) {
           Vertex45Compact vertex_45(point_data<Unit>((*itr).first, (*itr).second.first), 2, (*itr).second.second);
@@ -264,7 +264,7 @@ namespace boost { namespace polygon{
     // append to the container cT with polygons of three or four verticies
     template <class cT>
     void get_trapezoids(cT& container, orientation_2d slicing_orientation) const {
-      if(slicing_orientation == VERTICAL) {
+      if(slicing_orientation == VERTICAL_) {
         get_trapezoids(container);
       } else {
         polygon_45_set_data<Unit> ps(*this);
@@ -965,7 +965,7 @@ namespace boost { namespace polygon{
   template <typename Unit>
   inline point_data<Unit> bloatVertexInDirWithSQRT1OVER2(int edge1, int normal1, const point_data<Unit>& second, Unit bloating,
                                                          bool first) {
-    orientation_2d orient = first ? HORIZONTAL : VERTICAL;
+    orientation_2d orient = first ? HORIZONTAL_ : VERTICAL_;
     orientation_2d orientp = orient.get_perpendicular();
     int multiplier = first ? 1 : -1;
     point_data<Unit> pt1(second);
@@ -1056,9 +1056,9 @@ namespace boost { namespace polygon{
         point_data<Unit> edgePoint = bloatVertexInDirWithOptions(second, normal, bloating, UNDERSIZE);
         set_points(insertion_rect, second, edgePoint);
         if(normal == 0 || normal == 4)
-          bloat(insertion_rect, VERTICAL, bloating);
+          bloat(insertion_rect, VERTICAL_, bloating);
         else
-          bloat(insertion_rect, HORIZONTAL, bloating);
+          bloat(insertion_rect, HORIZONTAL_, bloating);
         sizingSet.insert(insertion_rect);
       }
       return;
@@ -1539,14 +1539,14 @@ namespace boost { namespace polygon{
                               rvalue.error_data_.end());
     if(is_manhattan() && rvalue.is_manhattan()) {
       //convert each into polygon_90_set data and call boolean operations
-      polygon_90_set_data<Unit> l90sd(VERTICAL), r90sd(VERTICAL), output(VERTICAL);
+      polygon_90_set_data<Unit> l90sd(VERTICAL_), r90sd(VERTICAL_), output(VERTICAL_);
       for(typename value_type::const_iterator itr = data_.begin(); itr != data_.end(); ++itr) {
         if((*itr).count[3] == 0) continue; //skip all non vertical edges
-        l90sd.insert(std::make_pair((*itr).pt.x(), std::make_pair<Unit, int>((*itr).pt.y(), (*itr).count[3])), false, VERTICAL);
+        l90sd.insert(std::make_pair((*itr).pt.x(), std::make_pair<Unit, int>((*itr).pt.y(), (*itr).count[3])), false, VERTICAL_);
       }
       for(typename value_type::const_iterator itr = rvalue.data_.begin(); itr != rvalue.data_.end(); ++itr) {
         if((*itr).count[3] == 0) continue; //skip all non vertical edges
-        r90sd.insert(std::make_pair((*itr).pt.x(), std::make_pair<Unit, int>((*itr).pt.y(), (*itr).count[3])), false, VERTICAL);
+        r90sd.insert(std::make_pair((*itr).pt.x(), std::make_pair<Unit, int>((*itr).pt.y(), (*itr).count[3])), false, VERTICAL_);
       }
       l90sd.sort();
       r90sd.sort();
@@ -1672,10 +1672,10 @@ namespace boost { namespace polygon{
     result.error_data_ = error_data_;
     if(is_manhattan()) {
       //convert each into polygon_90_set data and call boolean operations
-      polygon_90_set_data<Unit> l90sd(VERTICAL);
+      polygon_90_set_data<Unit> l90sd(VERTICAL_);
       for(typename value_type::const_iterator itr = data_.begin(); itr != data_.end(); ++itr) {
         if((*itr).count[3] == 0) continue; //skip all non vertical edges
-        l90sd.insert(std::make_pair((*itr).pt.x(), std::make_pair<Unit, int>((*itr).pt.y(), (*itr).count[3])), false, VERTICAL);
+        l90sd.insert(std::make_pair((*itr).pt.x(), std::make_pair<Unit, int>((*itr).pt.y(), (*itr).count[3])), false, VERTICAL_);
       }
       l90sd.sort();
 #ifdef BOOST_POLYGON_MSVC

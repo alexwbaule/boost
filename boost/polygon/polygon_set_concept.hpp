@@ -283,9 +283,9 @@ namespace boost { namespace polygon{
       ++itr_nxt;
       rectangle_data<Unit> bbox;
       extents(bbox, *itr);
-      uat pwidth = delta(bbox, HORIZONTAL);
+      uat pwidth = delta(bbox, HORIZONTAL_);
       if(pwidth > min_width && pwidth <= max_width){
-        uat pheight = delta(bbox, VERTICAL);
+        uat pheight = delta(bbox, VERTICAL_);
         if(pheight > min_height && pheight <= max_height){
           typename coordinate_traits<Unit>::area_type parea = area(*itr);
           if(parea <= max_area && parea >= min_area) {
@@ -527,7 +527,7 @@ namespace boost { namespace polygon{
       return polys.end();
     }
 
-    inline orientation_2d orient() const { return HORIZONTAL; }
+    inline orientation_2d orient() const { return HORIZONTAL_; }
 
     inline bool clean() const { return false; }
 

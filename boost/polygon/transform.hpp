@@ -283,19 +283,19 @@ class anisotropic_scale_factor {
   }
 
   scale_factor_type x() const {
-    return scale_[HORIZONTAL];
+    return scale_[HORIZONTAL_];
   }
 
   scale_factor_type y() const {
-    return scale_[VERTICAL];
+    return scale_[VERTICAL_];
   }
 
   void x(scale_factor_type value) {
-    scale_[HORIZONTAL] = value;
+    scale_[HORIZONTAL_] = value;
   }
 
   void y(scale_factor_type value) {
-    scale_[VERTICAL] = value;
+    scale_[VERTICAL_] = value;
   }
 
   // concatination operator (convolve scale factors)
@@ -327,9 +327,9 @@ class anisotropic_scale_factor {
   template <typename coordinate_type>
   void scale(coordinate_type& x, coordinate_type& y) const {
     x = scaling_policy<coordinate_type>::round(
-        (scale_factor_type)x * get(HORIZONTAL));
+        (scale_factor_type)x * get(HORIZONTAL_));
     y = scaling_policy<coordinate_type>::round(
-        (scale_factor_type)y * get(HORIZONTAL));
+        (scale_factor_type)y * get(HORIZONTAL_));
   }
 
   // invert this scale factor to give the reverse scale factor
@@ -408,8 +408,8 @@ class transformation {
     coordinate_type x, y;
     transformation<coordinate_type> inv = inverse();
     inv.transform(x, y);
-    p_.set(HORIZONTAL, p_.get(HORIZONTAL) + x);
-    p_.set(VERTICAL, p_.get(VERTICAL) + y);
+    p_.set(HORIZONTAL_, p_.get(HORIZONTAL_) + x);
+    p_.set(VERTICAL_, p_.get(VERTICAL_) + y);
     // concatenate axis transforms
     atr_ += tr.atr_;
     return *this;
@@ -439,14 +439,14 @@ class transformation {
 
   // apply the 2D portion of this transformation to the two coordinates given
   void transform(coordinate_type& x, coordinate_type& y) const {
-    y -= p_.get(VERTICAL);
-    x -= p_.get(HORIZONTAL);
+    y -= p_.get(VERTICAL_);
+    x -= p_.get(HORIZONTAL_);
     atr_.transform(x, y);
   }
 
   // invert this transformation
   transformation& invert() {
-    coordinate_type x = p_.get(HORIZONTAL), y = p_.get(VERTICAL);
+    coordinate_type x = p_.get(HORIZONTAL_), y = p_.get(VERTICAL_);
     atr_.transform(x, y);
     x *= -1;
     y *= -1;

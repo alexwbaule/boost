@@ -147,7 +147,7 @@ namespace boost { namespace polygon{
       return indirection_type::end(polygon_set);
     }
 
-    static inline orientation_2d orient(const T&) { return HORIZONTAL; }
+    static inline orientation_2d orient(const T&) { return HORIZONTAL_; }
 
     static inline bool clean(const T&) { return false; }
 
@@ -208,14 +208,14 @@ namespace boost { namespace polygon{
 //     typedef T operator_arg_type;
 
 //     static inline iterator_type begin(const T& polygon_set) {
-//       return iterator_geometry_to_set<concept_type, T>(polygon_set, LOW, HORIZONTAL);
+//       return iterator_geometry_to_set<concept_type, T>(polygon_set, LOW, HORIZONTAL_);
 //     }
 
 //     static inline iterator_type end(const T& polygon_set) {
-//       return iterator_geometry_to_set<concept_type, T>(polygon_set, HIGH, HORIZONTAL);
+//       return iterator_geometry_to_set<concept_type, T>(polygon_set, HIGH, HORIZONTAL_);
 //     }
 
-//     static inline orientation_2d orient(const T& polygon_set) { return HORIZONTAL; }
+//     static inline orientation_2d orient(const T& polygon_set) { return HORIZONTAL_; }
 
 //     static inline bool clean(const T& polygon_set) { return false; }
 
@@ -233,14 +233,14 @@ namespace boost { namespace polygon{
 //     typedef T operator_arg_type;
 
 //     static inline iterator_type begin(const T& polygon_set) {
-//       return iterator_type(polygon_set.begin(), HORIZONTAL);
+//       return iterator_type(polygon_set.begin(), HORIZONTAL_);
 //     }
 
 //     static inline iterator_type end(const T& polygon_set) {
-//       return iterator_type(polygon_set.end(), HORIZONTAL);
+//       return iterator_type(polygon_set.end(), HORIZONTAL_);
 //     }
 
-//     static inline orientation_2d orient(const T& polygon_set) { return HORIZONTAL; }
+//     static inline orientation_2d orient(const T& polygon_set) { return HORIZONTAL_; }
 
 //     static inline bool clean(const T& polygon_set) { return false; }
 

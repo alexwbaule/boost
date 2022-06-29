@@ -182,10 +182,10 @@ namespace boost { namespace polygon{
           if(have_first_y || (he2.first.y() >= min_y && he2.second.y() >= min_y)) {
             //at least one segment has a low y value within the range
             if(he1 == he2) continue;
-            if((std::min)(he2. first.get(HORIZONTAL),
-                          he2.second.get(HORIZONTAL)) >=
-               (std::max)(he1.second.get(HORIZONTAL),
-                          he1.first.get(HORIZONTAL)))
+            if((std::min)(he2. first.get(HORIZONTAL_),
+                          he2.second.get(HORIZONTAL_)) >=
+               (std::max)(he1.second.get(HORIZONTAL_),
+                          he1.first.get(HORIZONTAL_)))
               break;
             if(he1.first == he2.first || he1.second == he2.second)
               continue;
@@ -214,8 +214,8 @@ namespace boost { namespace polygon{
         //typename std::vector<Point>::iterator itr2 = upper_bound(pts.begin(), newend, (std::max)(he1.first, he1.second));
         Point startpt = (std::min)(he1.first, he1.second);
         Point stoppt = (std::max)(he1.first, he1.second);
-        //while(itr != newend && itr != pts.begin() && (*itr).get(HORIZONTAL) >= (std::min)(he1.first.get(HORIZONTAL), he1.second.get(HORIZONTAL))) --itr;
-        //while(itr2 != newend && (*itr2).get(HORIZONTAL) <= (std::max)(he1.first.get(HORIZONTAL), he1.second.get(HORIZONTAL))) ++itr2;
+        //while(itr != newend && itr != pts.begin() && (*itr).get(HORIZONTAL_) >= (std::min)(he1.first.get(HORIZONTAL_), he1.second.get(HORIZONTAL_))) --itr;
+        //while(itr2 != newend && (*itr2).get(HORIZONTAL_) <= (std::max)(he1.first.get(HORIZONTAL_), he1.second.get(HORIZONTAL_))) ++itr2;
         //itr = pts.begin();
         //itr2 = pts.end();
         while(lfinger != newend && (*lfinger).x() < startpt.x()) ++lfinger;
@@ -299,10 +299,10 @@ namespace boost { namespace polygon{
             inner != data.end(); ++inner) {
           const half_edge& he2 = (*inner).first;
           if(he1 == he2) continue;
-          if((std::min)(he2. first.get(HORIZONTAL),
-                        he2.second.get(HORIZONTAL)) >
-             (std::max)(he1.second.get(HORIZONTAL),
-                        he1.first.get(HORIZONTAL)))
+          if((std::min)(he2. first.get(HORIZONTAL_),
+                        he2.second.get(HORIZONTAL_)) >
+             (std::max)(he1.second.get(HORIZONTAL_),
+                        he1.first.get(HORIZONTAL_)))
             break;
           segment_id id2 = (*inner).second;
           if(scanline_base<Unit>::intersects(he1, he2)) {
@@ -323,9 +323,9 @@ namespace boost { namespace polygon{
       typedef bool result_type;
       inline less_point_down_slope() {}
       inline bool operator () (const Point& pt1, const Point& pt2) const {
-        if(pt1.get(HORIZONTAL) < pt2.get(HORIZONTAL)) return true;
-        if(pt1.get(HORIZONTAL) == pt2.get(HORIZONTAL)) {
-          if(pt1.get(VERTICAL) > pt2.get(VERTICAL)) return true;
+        if(pt1.get(HORIZONTAL_) < pt2.get(HORIZONTAL_)) return true;
+        if(pt1.get(HORIZONTAL_) == pt2.get(HORIZONTAL_)) {
+          if(pt1.get(VERTICAL_) > pt2.get(VERTICAL_)) return true;
         }
         return false;
       }
@@ -355,8 +355,8 @@ namespace boost { namespace polygon{
         //  //it is the begin event
           segment_id id = (*iter).second;
           const std::set<Point>& pts = intersection_points[id];
-          Point hpt(he.first.get(HORIZONTAL)+1, he.first.get(VERTICAL));
-          if(!scanline_base<Unit>::is_vertical(he) && scanline_base<Unit>::less_slope(he.first.get(HORIZONTAL), he.first.get(VERTICAL),
+          Point hpt(he.first.get(HORIZONTAL_)+1, he.first.get(VERTICAL_));
+          if(!scanline_base<Unit>::is_vertical(he) && scanline_base<Unit>::less_slope(he.first.get(HORIZONTAL_), he.first.get(VERTICAL_),
                                             he.second, hpt)) {
             //slope is below horizontal
             std::vector<Point> tmpPts;
@@ -396,12 +396,12 @@ namespace boost { namespace polygon{
 //       for(iT iter = begin; iter != end; ++iter) {
 //         const std::pair<half_edge, int>& elem = *iter;
 //         const half_edge& he = elem.first;
-//         Unit current_x = he.first.get(HORIZONTAL);
+//         Unit current_x = he.first.get(HORIZONTAL_);
 //         if(current_x != x_) {
 //           process_scan_event(intersection_points);
 //           while(!intersection_queue_.empty() &&
-//                 (*(intersection_queue_.begin()).get(HORIZONTAL) < current_x)) {
-//             x_ = *(intersection_queue_.begin()).get(HORIZONTAL);
+//                 (*(intersection_queue_.begin()).get(HORIZONTAL_) < current_x)) {
+//             x_ = *(intersection_queue_.begin()).get(HORIZONTAL_);
 //             process_intersections_at_scan_event(intersection_points);
 //           }
 //           x_ = current_x;
@@ -455,9 +455,9 @@ namespace boost { namespace polygon{
 //       //first find all secondary intersection locations and all scanline iterators
 //       //that are intersecting
 //       for(iter = intersection_queue_.begin();
-//           iter != intersection_queue_.end() && (*iter).get(HORIZONTAL) == x_; ++iter) {
+//           iter != intersection_queue_.end() && (*iter).get(HORIZONTAL_) == x_; ++iter) {
 //         Point pt = *iter;
-//         Unit y = pt.get(VERTICAL);
+//         Unit y = pt.get(VERTICAL_);
 //         intersection_locations.insert(y);
 //         //if x_ is max there can be only end events and no sloping edges
 //         if(x_ != (std::numeric_limits<Unit>::max)()) {
@@ -488,7 +488,7 @@ namespace boost { namespace polygon{
 //           inter_iter != intersecting_elements.end(); ++inter_iter) {
 //         //if it is horizontal update it now and continue
 //         if(is_horizontal((*inter_iter).first)) {
-//           update_segments(intersection_points, (*inter_iter).second, Point(x_, (*inter_iter).first.get(VERTICAL)));
+//           update_segments(intersection_points, (*inter_iter).second, Point(x_, (*inter_iter).first.get(VERTICAL_)));
 //         } else {
 //           //if x_ is max there can be only end events and no sloping edges
 //           if(x_ != (std::numeric_limits<Unit>::max)()) {
@@ -611,12 +611,12 @@ namespace boost { namespace polygon{
 //               //std::cout << "Failed to find end event id in vertical ids\n";
 //             } else {
 //               vertical_ids.erase(itr);
-//               vertical_data_[he.first.get(HORIZONTAL)] = vertical_ids;
+//               vertical_data_[he.first.get(HORIZONTAL_)] = vertical_ids;
 //             }
 //           } else {
 //             //half edge is a begin event
 //             vertical_ids.insert(id);
-//             vertical_data_[he.first.get(HORIZONTAL)] = vertical_ids;
+//             vertical_data_[he.first.get(HORIZONTAL_)] = vertical_ids;
 //           }
 //         }
 //         //prevent repeated insertion of same vertex into intersection queue
@@ -690,10 +690,10 @@ namespace boost { namespace polygon{
         return false;
       }
       for(std::size_t i = 0; i < input.size(); ++i) {
-        input[i].first.first = Point(input[i].first.first.get(HORIZONTAL) * -1,
-                                     input[i].first.first.get(VERTICAL) * -1);
-        input[i].first.second = Point(input[i].first.second.get(HORIZONTAL) * -1,
-                                     input[i].first.second.get(VERTICAL) * -1);
+        input[i].first.first = Point(input[i].first.first.get(HORIZONTAL_) * -1,
+                                     input[i].first.first.get(VERTICAL_) * -1);
+        input[i].first.second = Point(input[i].first.second.get(HORIZONTAL_) * -1,
+                                     input[i].first.second.get(VERTICAL_) * -1);
       }
       edges.clear();
       validate_scan(edges, input.begin(), input.end());
@@ -929,10 +929,10 @@ namespace boost { namespace polygon{
         return false;
       }
       for(std::size_t i = 0; i < edges.size(); ++i) {
-        edges[i].first.first = Point(edges[i].first.first.get(HORIZONTAL) * -1,
-                                     edges[i].first.first.get(VERTICAL) * -1);
-        edges[i].first.second = Point(edges[i].first.second.get(HORIZONTAL) * -1,
-                                     edges[i].first.second.get(VERTICAL) * -1);
+        edges[i].first.first = Point(edges[i].first.first.get(HORIZONTAL_) * -1,
+                                     edges[i].first.first.get(VERTICAL_) * -1);
+        edges[i].first.second = Point(edges[i].first.second.get(HORIZONTAL_) * -1,
+                                     edges[i].first.second.get(VERTICAL_) * -1);
       }
       if(!verify_scan(result, edges.begin(), edges.end())) {
         stdcout << "fail5 3 " << result.first << " " << result.second << "\n";
@@ -1046,8 +1046,8 @@ namespace boost { namespace polygon{
 #pragma warning (disable: 4127)
 #endif
       while(true) {
-        if(begin == end || (!first_iteration && ((*begin).first.first.get(VERTICAL) != y ||
-                                                 (*begin).first.first.get(HORIZONTAL) != x_))) {
+        if(begin == end || (!first_iteration && ((*begin).first.first.get(VERTICAL_) != y ||
+                                                 (*begin).first.first.get(HORIZONTAL_) != x_))) {
           //lookup iterator range in scanline for elements coming in from the left
           //that end at this y
           Point pt(x_, y);
@@ -1058,10 +1058,10 @@ namespace boost { namespace polygon{
             //if(evalAtXforY(x_, (*current_iter).first.first, (*current_iter).first.second) != y) {
             if(scanline_base<Unit>::on_above_or_below(Point(x_, y), (*current_iter).first) != 0) {
               Point e2(pt);
-              if(e2.get(VERTICAL) != (std::numeric_limits<Unit>::max)())
-                e2.set(VERTICAL, e2.get(VERTICAL) + 1);
+              if(e2.get(VERTICAL_) != (std::numeric_limits<Unit>::max)())
+                e2.set(VERTICAL_, e2.get(VERTICAL_) + 1);
               else
-                e2.set(VERTICAL, e2.get(VERTICAL) - 1);
+                e2.set(VERTICAL_, e2.get(VERTICAL_) - 1);
               half_edge vhe(pt, e2);
               current_iter = scan_data_.lower_bound(vhe);
             }
@@ -1110,11 +1110,11 @@ namespace boost { namespace polygon{
             }
             insertion_set_.push_back(insertion_elements[i]);
           }
-          if((begin == end || (*begin).first.first.get(HORIZONTAL) != x_)) {
+          if((begin == end || (*begin).first.first.get(HORIZONTAL_) != x_)) {
             if(vertical_properties_above.empty()) {
               return begin;
             } else {
-              y = vertical_edge_above.second.get(VERTICAL);
+              y = vertical_edge_above.second.get(VERTICAL_);
               vertical_properties_below.clear();
               vertical_properties_above.swap(vertical_properties_below);
               vertical_edge_below = vertical_edge_above;
@@ -1130,11 +1130,11 @@ namespace boost { namespace polygon{
         if(begin != end) {
           const vertex_property& vp = *begin;
           const half_edge& he = vp.first;
-          y = he.first.get(VERTICAL);
+          y = he.first.get(VERTICAL_);
           first_iteration = false;
           if(! vertical_properties_below.empty() &&
-             vertical_edge_below.second.get(VERTICAL) < y) {
-            y = vertical_edge_below.second.get(VERTICAL);
+             vertical_edge_below.second.get(VERTICAL_) < y) {
+            y = vertical_edge_below.second.get(VERTICAL_);
             continue;
           }
           if(scanline_base<Unit>::is_vertical(he)) {
@@ -1172,20 +1172,20 @@ namespace boost { namespace polygon{
       Unit current_x = x_;
       Unit previous_x = x_;
       while(epqi != end_point_queue_.end() &&
-            (*epqi).get(HORIZONTAL) <= current_x) {
-        x_ = (*epqi).get(HORIZONTAL);
+            (*epqi).get(HORIZONTAL_) <= current_x) {
+        x_ = (*epqi).get(HORIZONTAL_);
         if(x_ != previous_x) erase_end_events(epqi);
         previous_x = x_;
         //lookup elements
         Point e2(*epqi);
-        if(e2.get(VERTICAL) != (std::numeric_limits<Unit>::max)())
-          e2.set(VERTICAL, e2.get(VERTICAL) + 1);
+        if(e2.get(VERTICAL_) != (std::numeric_limits<Unit>::max)())
+          e2.set(VERTICAL_, e2.get(VERTICAL_) + 1);
         else
-          e2.set(VERTICAL, e2.get(VERTICAL) - 1);
+          e2.set(VERTICAL_, e2.get(VERTICAL_) - 1);
         half_edge vhe_e(*epqi, e2);
         iterator current_iter = scan_data_.lower_bound(vhe_e);
         while(current_iter != scan_data_.end() && (*current_iter).first.second == (*epqi)) {
-          //evalAtXforY(x_, (*current_iter).first.first, (*current_iter).first.second) == (*epqi).get(VERTICAL)) {
+          //evalAtXforY(x_, (*current_iter).first.first, (*current_iter).first.second) == (*epqi).get(VERTICAL_)) {
           removal_set_.push_back(current_iter);
           ++current_iter;
         }
@@ -1210,7 +1210,7 @@ namespace boost { namespace polygon{
     template <typename result_type, typename result_functor, typename iT>
     void scan(result_type& result, result_functor rf, iT begin, iT end) {
       while(begin != end) {
-        x_ = (*begin).first.first.get(HORIZONTAL); //update scanline stop location
+        x_ = (*begin).first.first.get(HORIZONTAL_); //update scanline stop location
         //print_scanline();
         --x_;
         remove_retired_edges_from_scanline();
@@ -1526,7 +1526,7 @@ namespace boost { namespace polygon{
         less_point lp;
         if(lp(lvalue.first.first, rvalue.first.first)) return true;
         if(lp(rvalue.first.first, lvalue.first.first)) return false;
-        Unit x = lvalue.first.first.get(HORIZONTAL);
+        Unit x = lvalue.first.first.get(HORIZONTAL_);
         int just_before_ = 0;
         less_half_edge lhe(&x, &just_before_, pack_);
         return lhe(lvalue.first, rvalue.first);
@@ -1682,7 +1682,7 @@ namespace boost { namespace polygon{
         multiplier *= -1;
         std::swap(current_vertex.first.first, current_vertex.first.second);
       }
-      current_vertex.second.second = multiplier * (euclidean_distance(next_point, current_point, HORIZONTAL) == 0 ? -1: 1);
+      current_vertex.second.second = multiplier * (euclidean_distance(next_point, current_point, HORIZONTAL_) == 0 ? -1: 1);
       pmd.push_back(current_vertex);
       //current_vertex.first.second = previous_point;
       //current_vertex.second.second *= -1;
@@ -1702,18 +1702,18 @@ namespace boost { namespace polygon{
       bool operator()(const half_edge& e1, const half_edge& e2) {
         const Point& pt1 = e1.first;
         const Point& pt2 = e2.first;
-        if(get(pt1, HORIZONTAL) ==
-           get(pt_, HORIZONTAL)) {
+        if(get(pt1, HORIZONTAL_) ==
+           get(pt_, HORIZONTAL_)) {
           //vertical edge is always largest
           return false;
         }
-        if(get(pt2, HORIZONTAL) ==
-           get(pt_, HORIZONTAL)) {
+        if(get(pt2, HORIZONTAL_) ==
+           get(pt_, HORIZONTAL_)) {
           //if half edge 1 is not vertical its slope is less than that of half edge 2
-          return get(pt1, HORIZONTAL) != get(pt2, HORIZONTAL);
+          return get(pt1, HORIZONTAL_) != get(pt2, HORIZONTAL_);
         }
-        return scanline_base<Unit>::less_slope(get(pt_, HORIZONTAL),
-                                               get(pt_, VERTICAL), pt1, pt2);
+        return scanline_base<Unit>::less_slope(get(pt_, HORIZONTAL_),
+                                               get(pt_, VERTICAL_), pt1, pt2);
       }
     };
 
@@ -2527,7 +2527,7 @@ pts.push_back(Point(12344171, 6695983 )); pts.push_back(Point(12287208, 6672388 
         less_point lp;
         if(lp(lvalue.first.first, rvalue.first.first)) return true;
         if(lp(rvalue.first.first, lvalue.first.first)) return false;
-        Unit x = lvalue.first.first.get(HORIZONTAL);
+        Unit x = lvalue.first.first.get(HORIZONTAL_);
         int just_before_ = 0;
         less_half_edge lhe(&x, &just_before_, pack_);
         return lhe(lvalue.first, rvalue.first);
@@ -2746,7 +2746,7 @@ pts.push_back(Point(12344171, 6695983 )); pts.push_back(Point(12287208, 6672388 
         less_point lp;
         if(lp(lvalue.first.first, rvalue.first.first)) return true;
         if(lp(rvalue.first.first, lvalue.first.first)) return false;
-        Unit x = lvalue.first.first.get(HORIZONTAL);
+        Unit x = lvalue.first.first.get(HORIZONTAL_);
         int just_before_ = 0;
         less_half_edge lhe(&x, &just_before_, pack_);
         return lhe(lvalue.first, rvalue.first);

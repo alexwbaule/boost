@@ -29,9 +29,9 @@ namespace boost { namespace polygon{
       typedef bool result_type;
       inline less_point() {}
       inline bool operator () (const Point& pt1, const Point& pt2) const {
-        if(pt1.get(HORIZONTAL) < pt2.get(HORIZONTAL)) return true;
-        if(pt1.get(HORIZONTAL) == pt2.get(HORIZONTAL)) {
-          if(pt1.get(VERTICAL) < pt2.get(VERTICAL)) return true;
+        if(pt1.get(HORIZONTAL_) < pt2.get(HORIZONTAL_)) return true;
+        if(pt1.get(HORIZONTAL_) == pt2.get(HORIZONTAL_)) {
+          if(pt1.get(VERTICAL_) < pt2.get(VERTICAL_)) return true;
         }
         return false;
       }
@@ -78,10 +78,10 @@ namespace boost { namespace polygon{
                                    const Point& pt1, const Point& pt2) {
       const Point* pts[2] = {&pt1, &pt2};
       typedef typename coordinate_traits<Unit>::manhattan_area_type at;
-      at dy2 = (at)pts[1]->get(VERTICAL) - (at)y;
-      at dy1 = (at)pts[0]->get(VERTICAL) - (at)y;
-      at dx2 = (at)pts[1]->get(HORIZONTAL) - (at)x;
-      at dx1 = (at)pts[0]->get(HORIZONTAL) - (at)x;
+      at dy2 = (at)pts[1]->get(VERTICAL_) - (at)y;
+      at dy1 = (at)pts[0]->get(VERTICAL_) - (at)y;
+      at dx2 = (at)pts[1]->get(HORIZONTAL_) - (at)x;
+      at dx1 = (at)pts[0]->get(HORIZONTAL_) - (at)x;
       return equal_slope(dx1, dy1, dx2, dy2);
     }
 
@@ -122,18 +122,18 @@ namespace boost { namespace polygon{
       const Point* pts[2] = {&pt1, &pt2};
       //compute y value on edge from pt_ to pts[1] at the x value of pts[0]
       typedef typename coordinate_traits<Unit>::manhattan_area_type at;
-      at dy2 = (at)pts[1]->get(VERTICAL) - (at)y;
-      at dy1 = (at)pts[0]->get(VERTICAL) - (at)y;
-      at dx2 = (at)pts[1]->get(HORIZONTAL) - (at)x;
-      at dx1 = (at)pts[0]->get(HORIZONTAL) - (at)x;
+      at dy2 = (at)pts[1]->get(VERTICAL_) - (at)y;
+      at dy1 = (at)pts[0]->get(VERTICAL_) - (at)y;
+      at dx2 = (at)pts[1]->get(HORIZONTAL_) - (at)x;
+      at dx1 = (at)pts[0]->get(HORIZONTAL_) - (at)x;
       return less_slope(dx1, dy1, dx2, dy2);
     }
 
     //return -1 below, 0 on and 1 above line
     static inline int on_above_or_below(Point pt, const half_edge& he) {
       if(pt == he.first || pt == he.second) return 0;
-      if(equal_slope(pt.get(HORIZONTAL), pt.get(VERTICAL), he.first, he.second)) return 0;
-      bool less_result = less_slope(pt.get(HORIZONTAL), pt.get(VERTICAL), he.first, he.second);
+      if(equal_slope(pt.get(HORIZONTAL_), pt.get(VERTICAL_), he.first, he.second)) return 0;
+      bool less_result = less_slope(pt.get(HORIZONTAL_), pt.get(VERTICAL_), he.first, he.second);
       int retval = less_result ? -1 : 1;
       less_point lp;
       if(lp(he.second, he.first)) retval *= -1;
@@ -153,13 +153,13 @@ namespace boost { namespace polygon{
       } else {
         return false; //can't intersect a grid not within bounding box
       }
-      Unit x = pt.get(HORIZONTAL);
-      Unit y = pt.get(VERTICAL);
+      Unit x = pt.get(HORIZONTAL_);
+      Unit y = pt.get(VERTICAL_);
       if(equal_slope(x, y, he.first, he.second) &&
          between(pt, he.first, he.second)) return true;
-      Point pt01(pt.get(HORIZONTAL), pt.get(VERTICAL) + 1);
-      Point pt10(pt.get(HORIZONTAL) + 1, pt.get(VERTICAL));
-      Point pt11(pt.get(HORIZONTAL) + 1, pt.get(VERTICAL) + 1);
+      Point pt01(pt.get(HORIZONTAL_), pt.get(VERTICAL_) + 1);
+      Point pt10(pt.get(HORIZONTAL_) + 1, pt.get(VERTICAL_));
+      Point pt11(pt.get(HORIZONTAL_) + 1, pt.get(VERTICAL_) + 1);
 //       if(pt01 == he.first) return true;
 //       if(pt10 == he.first) return true;
 //       if(pt11 == he.first) return true;
@@ -186,13 +186,13 @@ namespace boost { namespace polygon{
       if(pt.y() == other_pt.y())
         return pt.y();
       evalAtXforYxIn = xIn;
-      evalAtXforYx1 = pt.get(HORIZONTAL);
-      evalAtXforYy1 = pt.get(VERTICAL);
+      evalAtXforYx1 = pt.get(HORIZONTAL_);
+      evalAtXforYy1 = pt.get(VERTICAL_);
       evalAtXforYdx1 = evalAtXforYxIn - evalAtXforYx1;
       evalAtXforY0 = 0;
       if(evalAtXforYdx1 == evalAtXforY0) return (Unit)evalAtXforYy1;
-      evalAtXforYx2 = other_pt.get(HORIZONTAL);
-      evalAtXforYy2 = other_pt.get(VERTICAL);
+      evalAtXforYx2 = other_pt.get(HORIZONTAL_);
+      evalAtXforYy2 = other_pt.get(VERTICAL_);
 
       evalAtXforYdx = evalAtXforYx2 - evalAtXforYx1;
       evalAtXforYdy = evalAtXforYy2 - evalAtXforYy1;
@@ -211,13 +211,13 @@ namespace boost { namespace polygon{
       if(pt.y() == other_pt.y())
         return (high_precision)pt.y();
       evalAtXforYxIn = (high_precision)xIn;
-      evalAtXforYx1 = pt.get(HORIZONTAL);
-      evalAtXforYy1 = pt.get(VERTICAL);
+      evalAtXforYx1 = pt.get(HORIZONTAL_);
+      evalAtXforYy1 = pt.get(VERTICAL_);
       evalAtXforYdx1 = evalAtXforYxIn - evalAtXforYx1;
       evalAtXforY0 = high_precision(0);
       if(evalAtXforYdx1 == evalAtXforY0) return evalAtXforYret = evalAtXforYy1;
-      evalAtXforYx2 = (high_precision)other_pt.get(HORIZONTAL);
-      evalAtXforYy2 = (high_precision)other_pt.get(VERTICAL);
+      evalAtXforYx2 = (high_precision)other_pt.get(HORIZONTAL_);
+      evalAtXforYy2 = (high_precision)other_pt.get(VERTICAL_);
 
       evalAtXforYdx = evalAtXforYx2 - evalAtXforYx1;
       evalAtXforYdy = evalAtXforYy2 - evalAtXforYy1;
@@ -239,13 +239,13 @@ namespace boost { namespace polygon{
           return evalAtXforYret;
         }
         evalAtXforYxIn = (high_precision)xIn;
-        evalAtXforYx1 = pt.get(HORIZONTAL);
-        evalAtXforYy1 = pt.get(VERTICAL);
+        evalAtXforYx1 = pt.get(HORIZONTAL_);
+        evalAtXforYy1 = pt.get(VERTICAL_);
         evalAtXforYdx1 = evalAtXforYxIn - evalAtXforYx1;
         evalAtXforY0 = high_precision(0);
         if(evalAtXforYdx1 == evalAtXforY0) return evalAtXforYret = evalAtXforYy1;
-        evalAtXforYx2 = (high_precision)other_pt.get(HORIZONTAL);
-        evalAtXforYy2 = (high_precision)other_pt.get(VERTICAL);
+        evalAtXforYx2 = (high_precision)other_pt.get(HORIZONTAL_);
+        evalAtXforYy2 = (high_precision)other_pt.get(VERTICAL_);
 
         evalAtXforYdx = evalAtXforYx2 - evalAtXforYx1;
         evalAtXforYdy = evalAtXforYy2 - evalAtXforYy1;
@@ -255,15 +255,15 @@ namespace boost { namespace polygon{
     };
 
     static inline bool is_vertical(const half_edge& he) {
-      return he.first.get(HORIZONTAL) == he.second.get(HORIZONTAL);
+      return he.first.get(HORIZONTAL_) == he.second.get(HORIZONTAL_);
     }
 
     static inline bool is_horizontal(const half_edge& he) {
-      return he.first.get(VERTICAL) == he.second.get(VERTICAL);
+      return he.first.get(VERTICAL_) == he.second.get(VERTICAL_);
     }
 
     static inline bool is_45_degree(const half_edge& he) {
-      return euclidean_distance(he.first, he.second, HORIZONTAL) == euclidean_distance(he.first, he.second, VERTICAL);
+      return euclidean_distance(he.first, he.second, HORIZONTAL_) == euclidean_distance(he.first, he.second, VERTICAL_);
     }
 
     //scanline comparator functor
@@ -295,21 +295,21 @@ namespace boost { namespace polygon{
         Unit localx = *x_;
         Unit elm1y = 0;
         bool elm1_at_x = false;
-        if(localx == elm1.first.get(HORIZONTAL)) {
+        if(localx == elm1.first.get(HORIZONTAL_)) {
           elm1_at_x = true;
-          elm1y = elm1.first.get(VERTICAL);
-        } else if(localx == elm1.second.get(HORIZONTAL)) {
+          elm1y = elm1.first.get(VERTICAL_);
+        } else if(localx == elm1.second.get(HORIZONTAL_)) {
           elm1_at_x = true;
-          elm1y = elm1.second.get(VERTICAL);
+          elm1y = elm1.second.get(VERTICAL_);
         }
         Unit elm2y = 0;
         bool elm2_at_x = false;
-        if(localx == elm2.first.get(HORIZONTAL)) {
+        if(localx == elm2.first.get(HORIZONTAL_)) {
           elm2_at_x = true;
-          elm2y = elm2.first.get(VERTICAL);
-        } else if(localx == elm2.second.get(HORIZONTAL)) {
+          elm2y = elm2.first.get(VERTICAL_);
+        } else if(localx == elm2.second.get(HORIZONTAL_)) {
           elm2_at_x = true;
-          elm2y = elm2.second.get(VERTICAL);
+          elm2y = elm2.second.get(VERTICAL_);
         }
         bool retval = false;
         if(!(elm1_at_x && elm2_at_x)) {
@@ -332,10 +332,10 @@ namespace boost { namespace polygon{
           } else if(elm1y == elm2y) {
             if(elm1 == elm2)
               return false;
-            retval = less_slope(elm1.second.get(HORIZONTAL) - elm1.first.get(HORIZONTAL),
-                                     elm1.second.get(VERTICAL) - elm1.first.get(VERTICAL),
-                                     elm2.second.get(HORIZONTAL) - elm2.first.get(HORIZONTAL),
-                                     elm2.second.get(VERTICAL) - elm2.first.get(VERTICAL));
+            retval = less_slope(elm1.second.get(HORIZONTAL_) - elm1.first.get(HORIZONTAL_),
+                                     elm1.second.get(VERTICAL_) - elm1.first.get(VERTICAL_),
+                                     elm2.second.get(HORIZONTAL_) - elm2.first.get(HORIZONTAL_),
+                                     elm2.second.get(VERTICAL_) - elm2.first.get(VERTICAL_));
             retval = ((*justBefore_) != 0) ^ retval;
           }
         }
@@ -398,42 +398,42 @@ namespace boost { namespace polygon{
         if(!projected && !::boost::polygon::intersects(rect1, rect2, true)) return false;
         if(is_vertical(he1)) {
           if(is_vertical(he2)) return false;
-          y_high = evalAtXforYlazy(he1.first.get(HORIZONTAL), he2.first, he2.second);
+          y_high = evalAtXforYlazy(he1.first.get(HORIZONTAL_), he2.first, he2.second);
           Unit y_local = (Unit)y_high;
           if(y_high < y_local) --y_local;
-          if(projected || contains(rect1.get(VERTICAL), y_local, true)) {
-            intersection = Point(he1.first.get(HORIZONTAL), y_local);
+          if(projected || contains(rect1.get(VERTICAL_), y_local, true)) {
+            intersection = Point(he1.first.get(HORIZONTAL_), y_local);
             return true;
           } else {
             return false;
           }
         } else if(is_vertical(he2)) {
-          y_high = evalAtXforYlazy(he2.first.get(HORIZONTAL), he1.first, he1.second);
+          y_high = evalAtXforYlazy(he2.first.get(HORIZONTAL_), he1.first, he1.second);
           Unit y_local = (Unit)y_high;
           if(y_high < y_local) --y_local;
-          if(projected || contains(rect2.get(VERTICAL), y_local, true)) {
-            intersection = Point(he2.first.get(HORIZONTAL), y_local);
+          if(projected || contains(rect2.get(VERTICAL_), y_local, true)) {
+            intersection = Point(he2.first.get(HORIZONTAL_), y_local);
             return true;
           } else {
             return false;
           }
         }
         //the bounding boxes of the two line segments intersect, so we check closer to find the intersection point
-        dy2 = (he2.second.get(VERTICAL)) -
-          (he2.first.get(VERTICAL));
-        dy1 = (he1.second.get(VERTICAL)) -
-          (he1.first.get(VERTICAL));
-        dx2 = (he2.second.get(HORIZONTAL)) -
-          (he2.first.get(HORIZONTAL));
-        dx1 = (he1.second.get(HORIZONTAL)) -
-          (he1.first.get(HORIZONTAL));
+        dy2 = (he2.second.get(VERTICAL_)) -
+          (he2.first.get(VERTICAL_));
+        dy1 = (he1.second.get(VERTICAL_)) -
+          (he1.first.get(VERTICAL_));
+        dx2 = (he2.second.get(HORIZONTAL_)) -
+          (he2.first.get(HORIZONTAL_));
+        dx1 = (he1.second.get(HORIZONTAL_)) -
+          (he1.first.get(HORIZONTAL_));
         if(equal_slope_hp(dx1, dy1, dx2, dy2)) return false;
         //the line segments have different slopes
         //we can assume that the line segments are not vertical because such an intersection is handled elsewhere
-        x11 = (he1.first.get(HORIZONTAL));
-        x21 = (he2.first.get(HORIZONTAL));
-        y11 = (he1.first.get(VERTICAL));
-        y21 = (he2.first.get(VERTICAL));
+        x11 = (he1.first.get(HORIZONTAL_));
+        x21 = (he2.first.get(HORIZONTAL_));
+        y11 = (he1.first.get(VERTICAL_));
+        y21 = (he2.first.get(VERTICAL_));
         //Unit exp_x = ((at)x11 * (at)dy1 * (at)dx2 - (at)x21 * (at)dy2 * (at)dx1 + (at)y21 * (at)dx1 * (at)dx2 - (at)y11 * (at)dx1 * (at)dx2) / ((at)dy1 * (at)dx2 - (at)dy2 * (at)dx1);
         //Unit exp_y = ((at)y11 * (at)dx1 * (at)dy2 - (at)y21 * (at)dx2 * (at)dy1 + (at)x21 * (at)dy1 * (at)dy2 - (at)x11 * (at)dy1 * (at)dy2) / ((at)dx1 * (at)dy2 - (at)dx2 * (at)dy1);
         x_num = (x11 * dy1 * dx2 - x21 * dy2 * dx1 + y21 * dx1 * dx2 - y11 * dx1 * dx2);
@@ -510,42 +510,42 @@ namespace boost { namespace polygon{
         if(!::boost::polygon::intersects(rect1, rect2, true)) return false;
         if(is_vertical(he1)) {
           if(is_vertical(he2)) return false;
-          y_high = evalAtXforY(he1.first.get(HORIZONTAL), he2.first, he2.second);
+          y_high = evalAtXforY(he1.first.get(HORIZONTAL_), he2.first, he2.second);
           Unit y = convert_high_precision_type<Unit>(y_high);
           if(y_high < (high_precision)y) --y;
-          if(contains(rect1.get(VERTICAL), y, true)) {
-            intersection = Point(he1.first.get(HORIZONTAL), y);
+          if(contains(rect1.get(VERTICAL_), y, true)) {
+            intersection = Point(he1.first.get(HORIZONTAL_), y);
             return true;
           } else {
             return false;
           }
         } else if(is_vertical(he2)) {
-          y_high = evalAtXforY(he2.first.get(HORIZONTAL), he1.first, he1.second);
+          y_high = evalAtXforY(he2.first.get(HORIZONTAL_), he1.first, he1.second);
           Unit y = convert_high_precision_type<Unit>(y_high);
           if(y_high < (high_precision)y) --y;
-          if(contains(rect2.get(VERTICAL), y, true)) {
-            intersection = Point(he2.first.get(HORIZONTAL), y);
+          if(contains(rect2.get(VERTICAL_), y, true)) {
+            intersection = Point(he2.first.get(HORIZONTAL_), y);
             return true;
           } else {
             return false;
           }
         }
         //the bounding boxes of the two line segments intersect, so we check closer to find the intersection point
-        dy2 = (high_precision)(he2.second.get(VERTICAL)) -
-          (high_precision)(he2.first.get(VERTICAL));
-        dy1 = (high_precision)(he1.second.get(VERTICAL)) -
-          (high_precision)(he1.first.get(VERTICAL));
-        dx2 = (high_precision)(he2.second.get(HORIZONTAL)) -
-          (high_precision)(he2.first.get(HORIZONTAL));
-        dx1 = (high_precision)(he1.second.get(HORIZONTAL)) -
-          (high_precision)(he1.first.get(HORIZONTAL));
+        dy2 = (high_precision)(he2.second.get(VERTICAL_)) -
+          (high_precision)(he2.first.get(VERTICAL_));
+        dy1 = (high_precision)(he1.second.get(VERTICAL_)) -
+          (high_precision)(he1.first.get(VERTICAL_));
+        dx2 = (high_precision)(he2.second.get(HORIZONTAL_)) -
+          (high_precision)(he2.first.get(HORIZONTAL_));
+        dx1 = (high_precision)(he1.second.get(HORIZONTAL_)) -
+          (high_precision)(he1.first.get(HORIZONTAL_));
         if(equal_slope_hp(dx1, dy1, dx2, dy2)) return false;
         //the line segments have different slopes
         //we can assume that the line segments are not vertical because such an intersection is handled elsewhere
-        x11 = (high_precision)(he1.first.get(HORIZONTAL));
-        x21 = (high_precision)(he2.first.get(HORIZONTAL));
-        y11 = (high_precision)(he1.first.get(VERTICAL));
-        y21 = (high_precision)(he2.first.get(VERTICAL));
+        x11 = (high_precision)(he1.first.get(HORIZONTAL_));
+        x21 = (high_precision)(he2.first.get(HORIZONTAL_));
+        y11 = (high_precision)(he1.first.get(VERTICAL_));
+        y21 = (high_precision)(he2.first.get(VERTICAL_));
         //Unit exp_x = ((at)x11 * (at)dy1 * (at)dx2 - (at)x21 * (at)dy2 * (at)dx1 + (at)y21 * (at)dx1 * (at)dx2 - (at)y11 * (at)dx1 * (at)dx2) / ((at)dy1 * (at)dx2 - (at)dy2 * (at)dx1);
         //Unit exp_y = ((at)y11 * (at)dx1 * (at)dy2 - (at)y21 * (at)dx2 * (at)dy1 + (at)x21 * (at)dy1 * (at)dy2 - (at)x11 * (at)dy1 * (at)dy2) / ((at)dx1 * (at)dy2 - (at)dx2 * (at)dy1);
         x_num = (x11 * dy1 * dx2 - x21 * dy2 * dx1 + y21 * dx1 * dx2 - y11 * dx1 * dx2);
@@ -600,42 +600,42 @@ namespace boost { namespace polygon{
       if(!::boost::polygon::intersects(rect1, rect2, true)) return false;
       if(is_vertical(he1)) {
         if(is_vertical(he2)) return false;
-        high_precision y_high = evalAtXforY(he1.first.get(HORIZONTAL), he2.first, he2.second);
+        high_precision y_high = evalAtXforY(he1.first.get(HORIZONTAL_), he2.first, he2.second);
         Unit y = convert_high_precision_type<Unit>(y_high);
         if(y_high < (high_precision)y) --y;
-        if(contains(rect1.get(VERTICAL), y, true)) {
-          intersection = Point(he1.first.get(HORIZONTAL), y);
+        if(contains(rect1.get(VERTICAL_), y, true)) {
+          intersection = Point(he1.first.get(HORIZONTAL_), y);
           return true;
         } else {
           return false;
         }
       } else if(is_vertical(he2)) {
-        high_precision y_high = evalAtXforY(he2.first.get(HORIZONTAL), he1.first, he1.second);
+        high_precision y_high = evalAtXforY(he2.first.get(HORIZONTAL_), he1.first, he1.second);
         Unit y = convert_high_precision_type<Unit>(y_high);
         if(y_high < (high_precision)y) --y;
-        if(contains(rect2.get(VERTICAL), y, true)) {
-          intersection = Point(he2.first.get(HORIZONTAL), y);
+        if(contains(rect2.get(VERTICAL_), y, true)) {
+          intersection = Point(he2.first.get(HORIZONTAL_), y);
           return true;
         } else {
           return false;
         }
       }
       //the bounding boxes of the two line segments intersect, so we check closer to find the intersection point
-      high_precision dy2 = (high_precision)(he2.second.get(VERTICAL)) -
-        (high_precision)(he2.first.get(VERTICAL));
-      high_precision dy1 = (high_precision)(he1.second.get(VERTICAL)) -
-        (high_precision)(he1.first.get(VERTICAL));
-      high_precision dx2 = (high_precision)(he2.second.get(HORIZONTAL)) -
-        (high_precision)(he2.first.get(HORIZONTAL));
-      high_precision dx1 = (high_precision)(he1.second.get(HORIZONTAL)) -
-        (high_precision)(he1.first.get(HORIZONTAL));
+      high_precision dy2 = (high_precision)(he2.second.get(VERTICAL_)) -
+        (high_precision)(he2.first.get(VERTICAL_));
+      high_precision dy1 = (high_precision)(he1.second.get(VERTICAL_)) -
+        (high_precision)(he1.first.get(VERTICAL_));
+      high_precision dx2 = (high_precision)(he2.second.get(HORIZONTAL_)) -
+        (high_precision)(he2.first.get(HORIZONTAL_));
+      high_precision dx1 = (high_precision)(he1.second.get(HORIZONTAL_)) -
+        (high_precision)(he1.first.get(HORIZONTAL_));
       if(equal_slope_hp(dx1, dy1, dx2, dy2)) return false;
       //the line segments have different slopes
       //we can assume that the line segments are not vertical because such an intersection is handled elsewhere
-      high_precision x11 = (high_precision)(he1.first.get(HORIZONTAL));
-      high_precision x21 = (high_precision)(he2.first.get(HORIZONTAL));
-      high_precision y11 = (high_precision)(he1.first.get(VERTICAL));
-      high_precision y21 = (high_precision)(he2.first.get(VERTICAL));
+      high_precision x11 = (high_precision)(he1.first.get(HORIZONTAL_));
+      high_precision x21 = (high_precision)(he2.first.get(HORIZONTAL_));
+      high_precision y11 = (high_precision)(he1.first.get(VERTICAL_));
+      high_precision y21 = (high_precision)(he2.first.get(VERTICAL_));
       //Unit exp_x = ((at)x11 * (at)dy1 * (at)dx2 - (at)x21 * (at)dy2 * (at)dx1 + (at)y21 * (at)dx1 * (at)dx2 - (at)y11 * (at)dx1 * (at)dx2) / ((at)dy1 * (at)dx2 - (at)dy2 * (at)dx1);
       //Unit exp_y = ((at)y11 * (at)dx1 * (at)dy2 - (at)y21 * (at)dx2 * (at)dy1 + (at)x21 * (at)dy1 * (at)dy2 - (at)x11 * (at)dy1 * (at)dy2) / ((at)dx1 * (at)dy2 - (at)dx2 * (at)dy1);
       high_precision x_num = (x11 * dy1 * dx2 - x21 * dy2 * dx1 + y21 * dx1 * dx2 - y11 * dx1 * dx2);
@@ -676,7 +676,7 @@ namespace boost { namespace polygon{
       set_points(rect2, he2.first, he2.second);
       if(::boost::polygon::intersects(rect1, rect2, false)) {
         if(he1.first == he2.first) {
-          if(he1.second != he2.second && equal_slope(he1.first.get(HORIZONTAL), he1.first.get(VERTICAL),
+          if(he1.second != he2.second && equal_slope(he1.first.get(HORIZONTAL_), he1.first.get(VERTICAL_),
                                                      he1.second, he2.second)) {
             return true;
           } else {
@@ -684,7 +684,7 @@ namespace boost { namespace polygon{
           }
         }
         if(he1.first == he2.second) {
-          if(he1.second != he2.first && equal_slope(he1.first.get(HORIZONTAL), he1.first.get(VERTICAL),
+          if(he1.second != he2.first && equal_slope(he1.first.get(HORIZONTAL_), he1.first.get(VERTICAL_),
                                                     he1.second, he2.first)) {
             return true;
           } else {
@@ -692,7 +692,7 @@ namespace boost { namespace polygon{
           }
         }
         if(he1.second == he2.first) {
-          if(he1.first != he2.second && equal_slope(he1.second.get(HORIZONTAL), he1.second.get(VERTICAL),
+          if(he1.first != he2.second && equal_slope(he1.second.get(HORIZONTAL_), he1.second.get(VERTICAL_),
                                                     he1.first, he2.second)) {
             return true;
           } else {
@@ -700,7 +700,7 @@ namespace boost { namespace polygon{
           }
         }
         if(he1.second == he2.second) {
-          if(he1.first != he2.first && equal_slope(he1.second.get(HORIZONTAL), he1.second.get(VERTICAL),
+          if(he1.first != he2.first && equal_slope(he1.second.get(HORIZONTAL_), he1.second.get(VERTICAL_),
                                                    he1.first, he2.first)) {
             return true;
           } else {
@@ -719,12 +719,12 @@ namespace boost { namespace polygon{
         if(oab3 == oab4) return false; //both points of he2 are on same side of he1
         return true; //they must cross
       }
-      if(is_vertical(he1) && is_vertical(he2) && he1.first.get(HORIZONTAL) == he2.first.get(HORIZONTAL))
-        return ::boost::polygon::intersects(rect1.get(VERTICAL), rect2.get(VERTICAL), false) &&
-          rect1.get(VERTICAL) != rect2.get(VERTICAL);
-      if(is_horizontal(he1) && is_horizontal(he2) && he1.first.get(VERTICAL) == he2.first.get(VERTICAL))
-        return ::boost::polygon::intersects(rect1.get(HORIZONTAL), rect2.get(HORIZONTAL), false) &&
-          rect1.get(HORIZONTAL) != rect2.get(HORIZONTAL);
+      if(is_vertical(he1) && is_vertical(he2) && he1.first.get(HORIZONTAL_) == he2.first.get(HORIZONTAL_))
+        return ::boost::polygon::intersects(rect1.get(VERTICAL_), rect2.get(VERTICAL_), false) &&
+          rect1.get(VERTICAL_) != rect2.get(VERTICAL_);
+      if(is_horizontal(he1) && is_horizontal(he2) && he1.first.get(VERTICAL_) == he2.first.get(VERTICAL_))
+        return ::boost::polygon::intersects(rect1.get(HORIZONTAL_), rect2.get(HORIZONTAL_), false) &&
+          rect1.get(HORIZONTAL_) != rect2.get(HORIZONTAL_);
       return false;
     }
 
@@ -743,10 +743,10 @@ namespace boost { namespace polygon{
         return pt == vertex.pt && other_pt == vertex.other_pt && count == vertex.count; }
       inline bool operator!=(const vertex_half_edge& vertex) const { return !((*this) == vertex); }
       inline bool operator<(const vertex_half_edge& vertex) const {
-        if(pt.get(HORIZONTAL) < vertex.pt.get(HORIZONTAL)) return true;
-        if(pt.get(HORIZONTAL) == vertex.pt.get(HORIZONTAL)) {
-          if(pt.get(VERTICAL) < vertex.pt.get(VERTICAL)) return true;
-          if(pt.get(VERTICAL) == vertex.pt.get(VERTICAL)) { return less_slope(pt.get(HORIZONTAL), pt.get(VERTICAL),
+        if(pt.get(HORIZONTAL_) < vertex.pt.get(HORIZONTAL_)) return true;
+        if(pt.get(HORIZONTAL_) == vertex.pt.get(HORIZONTAL_)) {
+          if(pt.get(VERTICAL_) < vertex.pt.get(VERTICAL_)) return true;
+          if(pt.get(VERTICAL_) == vertex.pt.get(VERTICAL_)) { return less_slope(pt.get(HORIZONTAL_), pt.get(VERTICAL_),
                                                                               other_pt, vertex.other_pt);
           }
         }
@@ -757,12 +757,12 @@ namespace boost { namespace polygon{
       inline bool operator>=(const vertex_half_edge& vertex) const { return !((*this) < vertex); }
       inline high_precision evalAtX(Unit xIn) const { return evalAtXforYlazy(xIn, pt, other_pt); }
       inline bool is_vertical() const {
-        return pt.get(HORIZONTAL) == other_pt.get(HORIZONTAL);
+        return pt.get(HORIZONTAL_) == other_pt.get(HORIZONTAL_);
       }
       inline bool is_begin() const {
-        return pt.get(HORIZONTAL) < other_pt.get(HORIZONTAL) ||
-          (pt.get(HORIZONTAL) == other_pt.get(HORIZONTAL) &&
-           (pt.get(VERTICAL) < other_pt.get(VERTICAL)));
+        return pt.get(HORIZONTAL_) < other_pt.get(HORIZONTAL_) ||
+          (pt.get(HORIZONTAL_) == other_pt.get(HORIZONTAL_) &&
+           (pt.get(VERTICAL_) < other_pt.get(VERTICAL_)));
       }
     };
 
@@ -788,21 +788,21 @@ namespace boost { namespace polygon{
         Unit localx = *x_;
         Unit elm1y = 0;
         bool elm1_at_x = false;
-        if(localx == elm1.pt.get(HORIZONTAL)) {
+        if(localx == elm1.pt.get(HORIZONTAL_)) {
           elm1_at_x = true;
-          elm1y = elm1.pt.get(VERTICAL);
-        } else if(localx == elm1.other_pt.get(HORIZONTAL)) {
+          elm1y = elm1.pt.get(VERTICAL_);
+        } else if(localx == elm1.other_pt.get(HORIZONTAL_)) {
           elm1_at_x = true;
-          elm1y = elm1.other_pt.get(VERTICAL);
+          elm1y = elm1.other_pt.get(VERTICAL_);
         }
         Unit elm2y = 0;
         bool elm2_at_x = false;
-        if(localx == elm2.pt.get(HORIZONTAL)) {
+        if(localx == elm2.pt.get(HORIZONTAL_)) {
           elm2_at_x = true;
-          elm2y = elm2.pt.get(VERTICAL);
-        } else if(localx == elm2.other_pt.get(HORIZONTAL)) {
+          elm2y = elm2.pt.get(VERTICAL_);
+        } else if(localx == elm2.other_pt.get(HORIZONTAL_)) {
           elm2_at_x = true;
-          elm2y = elm2.other_pt.get(VERTICAL);
+          elm2y = elm2.other_pt.get(VERTICAL_);
         }
         bool retval = false;
         if(!(elm1_at_x && elm2_at_x)) {
@@ -825,10 +825,10 @@ namespace boost { namespace polygon{
           } else if(elm1y == elm2y) {
             if(elm1.pt == elm2.pt && elm1.other_pt == elm2.other_pt)
               return false;
-            retval = less_slope(elm1.other_pt.get(HORIZONTAL) - elm1.pt.get(HORIZONTAL),
-                                     elm1.other_pt.get(VERTICAL) - elm1.pt.get(VERTICAL),
-                                     elm2.other_pt.get(HORIZONTAL) - elm2.pt.get(HORIZONTAL),
-                                     elm2.other_pt.get(VERTICAL) - elm2.pt.get(VERTICAL));
+            retval = less_slope(elm1.other_pt.get(HORIZONTAL_) - elm1.pt.get(HORIZONTAL_),
+                                     elm1.other_pt.get(VERTICAL_) - elm1.pt.get(VERTICAL_),
+                                     elm2.other_pt.get(HORIZONTAL_) - elm2.pt.get(HORIZONTAL_),
+                                     elm2.other_pt.get(VERTICAL_) - elm2.pt.get(VERTICAL_));
             retval = ((*justBefore_) != 0) ^ retval;
           }
         }
@@ -1214,7 +1214,7 @@ namespace boost { namespace polygon{
       inline less_half_edge_count() : pt_() {}
       inline less_half_edge_count(Point point) : pt_(point) {}
       inline bool operator () (const std::pair<Point, int>& elm1, const std::pair<Point, int>& elm2) const {
-        return scanline_base<Unit>::less_slope(pt_.get(HORIZONTAL), pt_.get(VERTICAL), elm1.first, elm2.first);
+        return scanline_base<Unit>::less_slope(pt_.get(HORIZONTAL_), pt_.get(VERTICAL_), elm1.first, elm2.first);
       }
     };
 
@@ -1236,10 +1236,10 @@ namespace boost { namespace polygon{
       inline less_incoming_count(Point point) : pt_(point) {}
       inline bool operator () (const std::pair<std::pair<std::pair<Point, Point>, int>, active_tail_arbitrary*>& elm1,
                                const std::pair<std::pair<std::pair<Point, Point>, int>, active_tail_arbitrary*>& elm2) const {
-        Unit dx1 = elm1.first.first.first.get(HORIZONTAL) - elm1.first.first.second.get(HORIZONTAL);
-        Unit dx2 = elm2.first.first.first.get(HORIZONTAL) - elm2.first.first.second.get(HORIZONTAL);
-        Unit dy1 = elm1.first.first.first.get(VERTICAL) - elm1.first.first.second.get(VERTICAL);
-        Unit dy2 = elm2.first.first.first.get(VERTICAL) - elm2.first.first.second.get(VERTICAL);
+        Unit dx1 = elm1.first.first.first.get(HORIZONTAL_) - elm1.first.first.second.get(HORIZONTAL_);
+        Unit dx2 = elm2.first.first.first.get(HORIZONTAL_) - elm2.first.first.second.get(HORIZONTAL_);
+        Unit dy1 = elm1.first.first.first.get(VERTICAL_) - elm1.first.first.second.get(VERTICAL_);
+        Unit dy2 = elm2.first.first.first.get(VERTICAL_) - elm2.first.first.second.get(VERTICAL_);
         return scanline_base<Unit>::less_slope(dx1, dy1, dx2, dy2);
       }
     };
@@ -1256,7 +1256,7 @@ namespace boost { namespace polygon{
       tmp.push_back(count[0]);
       //merge duplicates
       for(std::size_t i = 1; i < count.size(); ++i) {
-        if(!equal_slope(pt.get(HORIZONTAL), pt.get(VERTICAL), tmp[i-1].first, count[i].first)) {
+        if(!equal_slope(pt.get(HORIZONTAL_), pt.get(VERTICAL_), tmp[i-1].first, count[i].first)) {
           tmp.push_back(count[i]);
         } else {
           tmp.back().second += count[i].second;
@@ -1291,9 +1291,9 @@ namespace boost { namespace polygon{
         return pt == vertex.pt && count == vertex.count; }
       inline bool operator!=(const vertex_arbitrary_compact& vertex) const { return !((*this) == vertex); }
       inline bool operator<(const vertex_arbitrary_compact& vertex) const {
-        if(pt.get(HORIZONTAL) < vertex.pt.get(HORIZONTAL)) return true;
-        if(pt.get(HORIZONTAL) == vertex.pt.get(HORIZONTAL)) {
-          return pt.get(VERTICAL) < vertex.pt.get(VERTICAL);
+        if(pt.get(HORIZONTAL_) < vertex.pt.get(HORIZONTAL_)) return true;
+        if(pt.get(HORIZONTAL_) == vertex.pt.get(HORIZONTAL_)) {
+          return pt.get(VERTICAL_) < vertex.pt.get(VERTICAL_);
         }
         return false;
       }
@@ -1354,7 +1354,7 @@ namespace boost { namespace polygon{
       //std::cout << "1\n";
       while(inputBegin != inputEnd) {
         //std::cout << "2\n";
-        x_ = (*inputBegin).pt.get(HORIZONTAL);
+        x_ = (*inputBegin).pt.get(HORIZONTAL_);
         //std::cout << "SCAN FORMATION " << x_ << "\n";
         //std::cout << "x_ = " << x_ << "\n";
         //std::cout << "scan line size: " << scanData_.size() << "\n";
@@ -1402,10 +1402,10 @@ namespace boost { namespace polygon{
       //assert size = size_less_1 + 1
       //std::cout << tails.size() << " " << incoming.size() << " " << counts_from_scanline.size() << " " << incoming_count.size() << "\n";
       //         for(std::size_t i = 0; i < counts.size(); ++i) {
-      //           std::cout << counts_from_scanline[i].first.first.first.get(HORIZONTAL) << ",";
-      //           std::cout << counts_from_scanline[i].first.first.first.get(VERTICAL) << " ";
-      //           std::cout << counts_from_scanline[i].first.first.second.get(HORIZONTAL) << ",";
-      //           std::cout << counts_from_scanline[i].first.first.second.get(VERTICAL) << ":";
+      //           std::cout << counts_from_scanline[i].first.first.first.get(HORIZONTAL_) << ",";
+      //           std::cout << counts_from_scanline[i].first.first.first.get(VERTICAL_) << " ";
+      //           std::cout << counts_from_scanline[i].first.first.second.get(HORIZONTAL_) << ",";
+      //           std::cout << counts_from_scanline[i].first.first.second.get(VERTICAL_) << ":";
       //           std::cout << counts_from_scanline[i].first.second << " ";
       //         } std::cout << "\n";
       //         print(incoming_count);
@@ -1450,7 +1450,7 @@ namespace boost { namespace polygon{
                     active_tail_arbitrary::createActiveTailsAsPair(point, true, 0, fractureHoles_ != 0);
                   //tailPair.first->print();
                   //tailPair.second->print();
-                  if(j == i_size_less_1 && incoming_count[j].first.get(HORIZONTAL) == point.get(HORIZONTAL)) {
+                  if(j == i_size_less_1 && incoming_count[j].first.get(HORIZONTAL_) == point.get(HORIZONTAL_)) {
                     //vertical active tail becomes return value
                     returnValue = tailPair.first;
                     returnCount.first = point;
@@ -1495,7 +1495,7 @@ namespace boost { namespace polygon{
                     //pass through solid on top
                     tails[i]->pushPoint(point);
                     //std::cout << "after push\n";
-                    if(j == i_size_less_1 && incoming_count[j].first.get(HORIZONTAL) == point.get(HORIZONTAL)) {
+                    if(j == i_size_less_1 && incoming_count[j].first.get(HORIZONTAL_) == point.get(HORIZONTAL_)) {
                       returnValue = tails[i];
                       returnCount.first = point;
                       returnCount.second = -1;
@@ -1529,7 +1529,7 @@ namespace boost { namespace polygon{
                     //std::cout << "case4: " << i << " " << j << "\n";
                     //pass through solid on bottom
                     tails[i]->pushPoint(point);
-                    if(j == i_size_less_1 && incoming_count[j].first.get(HORIZONTAL) == point.get(HORIZONTAL)) {
+                    if(j == i_size_less_1 && incoming_count[j].first.get(HORIZONTAL_) == point.get(HORIZONTAL_)) {
                       returnValue = tails[i];
                       returnCount.first = point;
                       returnCount.second = 1;
@@ -1586,7 +1586,7 @@ namespace boost { namespace polygon{
                 //we are beginning a empty space
                 active_tail_arbitrary* holep = 0;
                 //if(c_size && counts[c_size_less_1] == 0 &&
-                //   counts_from_scanline[c_size_less_1].first.first.first.get(HORIZONTAL) == point.get(HORIZONTAL))
+                //   counts_from_scanline[c_size_less_1].first.first.first.get(HORIZONTAL_) == point.get(HORIZONTAL_))
                 if(have_vertical_tail_from_below) {
                   holep = tails[c_size_less_1];
                   tails[c_size_less_1] = 0;
@@ -1594,7 +1594,7 @@ namespace boost { namespace polygon{
                 }
                 std::pair<active_tail_arbitrary*, active_tail_arbitrary*> tailPair =
                   active_tail_arbitrary::createActiveTailsAsPair(point, false, holep, fractureHoles_ != 0);
-                if(j == i_size_less_1 && incoming_count[j].first.get(HORIZONTAL) == point.get(HORIZONTAL)) {
+                if(j == i_size_less_1 && incoming_count[j].first.get(HORIZONTAL_) == point.get(HORIZONTAL_)) {
                   //std::cout << "vertical element " << point << "\n";
                   returnValue = tailPair.first;
                   returnCount.first = point;
@@ -1635,8 +1635,8 @@ namespace boost { namespace polygon{
 
     static inline void print(const vertex_arbitrary_count& count) {
       for(unsigned i = 0; i < count.size(); ++i) {
-        //std::cout << count[i].first.get(HORIZONTAL) << ",";
-        //std::cout << count[i].first.get(VERTICAL) << ":";
+        //std::cout << count[i].first.get(HORIZONTAL_) << ",";
+        //std::cout << count[i].first.get(VERTICAL_) << ":";
         //std::cout << count[i].second << " ";
       } //std::cout << "\n";
     }
@@ -1660,9 +1660,9 @@ namespace boost { namespace polygon{
       iT currentIter = inputBegin;
       std::vector<iterator> elementIters;
       std::vector<std::pair<vertex_half_edge, active_tail_arbitrary*> > elements;
-      while(currentIter != inputEnd && currentIter->pt.get(HORIZONTAL) == x_) {
+      while(currentIter != inputEnd && currentIter->pt.get(HORIZONTAL_) == x_) {
         //std::cout << "loop\n";
-        Unit currentY = (*currentIter).pt.get(VERTICAL);
+        Unit currentY = (*currentIter).pt.get(VERTICAL_);
         //std::cout << "current Y " << currentY << "\n";
         //std::cout << "scanline size " << scanData_.size() << "\n";
         //print(scanData_);
@@ -1697,11 +1697,11 @@ namespace boost { namespace polygon{
           const vertex_half_edge& elem = *currentIter;
           incoming.push_back(std::pair<Point, int>(elem.other_pt, elem.count));
           ++currentIter;
-        } while(currentIter != inputEnd && currentIter->pt.get(VERTICAL) == currentY &&
-                currentIter->pt.get(HORIZONTAL) == x_);
+        } while(currentIter != inputEnd && currentIter->pt.get(VERTICAL_) == currentY &&
+                currentIter->pt.get(HORIZONTAL_) == x_);
         //print(incoming);
         sort_vertex_arbitrary_count(incoming, currentPoint);
-        //std::cout << currentPoint.get(HORIZONTAL) << "," << currentPoint.get(VERTICAL) << "\n";
+        //std::cout << currentPoint.get(HORIZONTAL_) << "," << currentPoint.get(VERTICAL_) << "\n";
         //print(incoming);
         //std::cout << "incoming counts from input size " << incoming.size() << "\n";
         //compact_vertex_arbitrary_count(currentPoint, incoming);
@@ -1726,7 +1726,7 @@ namespace boost { namespace polygon{
                                                                                   -verticalCount.second),
                                           verticalTail));
         }
-        if(!incoming.empty() && incoming.back().first.get(HORIZONTAL) == x_) {
+        if(!incoming.empty() && incoming.back().first.get(HORIZONTAL_) == x_) {
           //std::cout << "inverted vertical event\n";
           incoming.back().second *= -1;
         }
@@ -1743,9 +1743,9 @@ namespace boost { namespace polygon{
           //iter is still at the next y element above the current y value in the tree
           //std::cout << "checking whether ot handle hole\n";
           if(currentIter == inputEnd ||
-             currentIter->pt.get(HORIZONTAL) != x_ ||
+             currentIter->pt.get(HORIZONTAL_) != x_ ||
              scanline_base<Unit>::on_above_or_below(currentIter->pt, half_edge(iter->first.pt, iter->first.other_pt)) != -1) {
-            //(high_precision)(currentIter->pt.get(VERTICAL)) >= iter->first.evalAtX(x_)) {
+            //(high_precision)(currentIter->pt.get(VERTICAL_)) >= iter->first.evalAtX(x_)) {
 
             //std::cout << "handle hole here\n";
             if(fractureHoles_) {
@@ -2255,7 +2255,7 @@ namespace boost { namespace polygon{
       //std::cout << "1\n";
       while(inputBegin != inputEnd) {
         //std::cout << "2\n";
-        polygon_arbitrary_formation<Unit>::x_ = (*inputBegin).pt.get(HORIZONTAL);
+        polygon_arbitrary_formation<Unit>::x_ = (*inputBegin).pt.get(HORIZONTAL_);
         //std::cout << "SCAN FORMATION " << x_ << "\n";
         //std::cout << "x_ = " << x_ << "\n";
         //std::cout << "scan line size: " << scanData_.size() << "\n";
@@ -2323,10 +2323,10 @@ namespace boost { namespace polygon{
       //assert size = size_less_1 + 1
       //std::cout << tails.size() << " " << incoming.size() << " " << counts_from_scanline.size() << " " << incoming_count.size() << "\n";
       //         for(std::size_t i = 0; i < counts.size(); ++i) {
-      //           std::cout << counts_from_scanline[i].first.first.first.get(HORIZONTAL) << ",";
-      //           std::cout << counts_from_scanline[i].first.first.first.get(VERTICAL) << " ";
-      //           std::cout << counts_from_scanline[i].first.first.second.get(HORIZONTAL) << ",";
-      //           std::cout << counts_from_scanline[i].first.first.second.get(VERTICAL) << ":";
+      //           std::cout << counts_from_scanline[i].first.first.first.get(HORIZONTAL_) << ",";
+      //           std::cout << counts_from_scanline[i].first.first.first.get(VERTICAL_) << " ";
+      //           std::cout << counts_from_scanline[i].first.first.second.get(HORIZONTAL_) << ",";
+      //           std::cout << counts_from_scanline[i].first.first.second.get(VERTICAL_) << ":";
       //           std::cout << counts_from_scanline[i].first.second << " ";
       //         } std::cout << "\n";
       //         print(incoming_count);
@@ -2371,7 +2371,7 @@ namespace boost { namespace polygon{
                     active_tail_arbitrary::createActiveTailsAsPair(point, true, 0, polygon_arbitrary_formation<Unit>::fractureHoles_ != 0);
                   //tailPair.first->print();
                   //tailPair.second->print();
-                  if(j == i_size_less_1 && incoming_count[j].first.get(HORIZONTAL) == point.get(HORIZONTAL)) {
+                  if(j == i_size_less_1 && incoming_count[j].first.get(HORIZONTAL_) == point.get(HORIZONTAL_)) {
                     //vertical active tail becomes return value
                     returnValue = tailPair.first;
                     returnCount.first = point;
@@ -2416,7 +2416,7 @@ namespace boost { namespace polygon{
                     //pass through solid on top
                     tails[i]->pushPoint(point);
                     //std::cout << "after push\n";
-                    if(j == i_size_less_1 && incoming_count[j].first.get(HORIZONTAL) == point.get(HORIZONTAL)) {
+                    if(j == i_size_less_1 && incoming_count[j].first.get(HORIZONTAL_) == point.get(HORIZONTAL_)) {
                       returnValue = tails[i];
                       returnCount.first = point;
                       returnCount.second = -1;
@@ -2456,11 +2456,11 @@ namespace boost { namespace polygon{
 
                     //if count from scanline is vertical
                     if(i == c_size_less_1 &&
-                       counts_from_scanline[i].first.first.first.get(HORIZONTAL) ==
-                       point.get(HORIZONTAL)) {
+                       counts_from_scanline[i].first.first.first.get(HORIZONTAL_) ==
+                       point.get(HORIZONTAL_)) {
                        //if incoming count is vertical
                        if(j == i_size_less_1 &&
-                          incoming_count[j].first.get(HORIZONTAL) == point.get(HORIZONTAL)) {
+                          incoming_count[j].first.get(HORIZONTAL_) == point.get(HORIZONTAL_)) {
                          returnValue = tails[i];
                          returnCount.first = point;
                          returnCount.second = 1;
@@ -2471,8 +2471,8 @@ namespace boost { namespace polygon{
                                                                                   incoming_count[j].first, incoming[j]), tails[i]));
                        }
                     } else if(j == i_size_less_1 &&
-                              incoming_count[j].first.get(HORIZONTAL) ==
-                              point.get(HORIZONTAL)) {
+                              incoming_count[j].first.get(HORIZONTAL_) ==
+                              point.get(HORIZONTAL_)) {
                       if(verticalPair.first == 0) {
                         getVerticalPair_(verticalPair, previter);
                       }
@@ -2516,8 +2516,8 @@ namespace boost { namespace polygon{
                 tails[i]->pushPoint(point);
                 verticalPairOut.first = tails[i];
                 if(j == c_size_less_1 &&
-                   counts_from_scanline[j].first.first.first.get(HORIZONTAL) ==
-                   point.get(HORIZONTAL)) {
+                   counts_from_scanline[j].first.first.first.get(HORIZONTAL_) ==
+                   point.get(HORIZONTAL_)) {
                   verticalPairOut.second = tails[j];
                 } else {
                   //need to close a trapezoid below
@@ -2551,7 +2551,7 @@ namespace boost { namespace polygon{
                 }
                 verticalPair.second->pushPoint(point);
                 if(j == i_size_less_1 &&
-                   incoming_count[j].first.get(HORIZONTAL) == point.get(HORIZONTAL)) {
+                   incoming_count[j].first.get(HORIZONTAL_) == point.get(HORIZONTAL_)) {
                   returnValue = verticalPair.first;
                   returnCount.first = point;
                   returnCount.second = -1;
@@ -2591,8 +2591,8 @@ namespace boost { namespace polygon{
 
     static inline void print(const vertex_arbitrary_count& count) {
       for(unsigned i = 0; i < count.size(); ++i) {
-        //std::cout << count[i].first.get(HORIZONTAL) << ",";
-        //std::cout << count[i].first.get(VERTICAL) << ":";
+        //std::cout << count[i].first.get(HORIZONTAL_) << ",";
+        //std::cout << count[i].first.get(VERTICAL_) << ":";
         //std::cout << count[i].second << " ";
       } //std::cout << "\n";
     }
@@ -2617,9 +2617,9 @@ namespace boost { namespace polygon{
       iT currentIter = inputBegin;
       std::vector<iterator> elementIters;
       std::vector<std::pair<vertex_half_edge, active_tail_arbitrary*> > elements;
-      while(currentIter != inputEnd && currentIter->pt.get(HORIZONTAL) == polygon_arbitrary_formation<Unit>::x_) {
+      while(currentIter != inputEnd && currentIter->pt.get(HORIZONTAL_) == polygon_arbitrary_formation<Unit>::x_) {
         //std::cout << "loop\n";
-        Unit currentY = (*currentIter).pt.get(VERTICAL);
+        Unit currentY = (*currentIter).pt.get(VERTICAL_);
         //std::cout << "current Y " << currentY << "\n";
         //std::cout << "scanline size " << scanData_.size() << "\n";
         //print(scanData_);
@@ -2659,11 +2659,11 @@ namespace boost { namespace polygon{
           const vertex_half_edge& elem = *currentIter;
           incoming.push_back(std::pair<Point, int>(elem.other_pt, elem.count));
           ++currentIter;
-        } while(currentIter != inputEnd && currentIter->pt.get(VERTICAL) == currentY &&
-                currentIter->pt.get(HORIZONTAL) == polygon_arbitrary_formation<Unit>::x_);
+        } while(currentIter != inputEnd && currentIter->pt.get(VERTICAL_) == currentY &&
+                currentIter->pt.get(HORIZONTAL_) == polygon_arbitrary_formation<Unit>::x_);
         //print(incoming);
         this->sort_vertex_arbitrary_count(incoming, currentPoint);
-        //std::cout << currentPoint.get(HORIZONTAL) << "," << currentPoint.get(VERTICAL) << "\n";
+        //std::cout << currentPoint.get(HORIZONTAL_) << "," << currentPoint.get(VERTICAL_) << "\n";
         //print(incoming);
         //std::cout << "incoming counts from input size " << incoming.size() << "\n";
         //compact_vertex_arbitrary_count(currentPoint, incoming);
@@ -2688,7 +2688,7 @@ namespace boost { namespace polygon{
                                                                                   -verticalCount.second),
                                           verticalTail));
         }
-        if(!incoming.empty() && incoming.back().first.get(HORIZONTAL) == polygon_arbitrary_formation<Unit>::x_) {
+        if(!incoming.empty() && incoming.back().first.get(HORIZONTAL_) == polygon_arbitrary_formation<Unit>::x_) {
           //std::cout << "inverted vertical event\n";
           incoming.back().second *= -1;
         }

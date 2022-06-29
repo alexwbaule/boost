@@ -81,7 +81,7 @@ namespace boost { namespace polygon{
                        void>::type
   get_rectangles(output_container_type& output, const polygon_set_type& polygon_set) {
     clean(polygon_set);
-    polygon_90_set_data<typename polygon_90_set_traits<polygon_set_type>::coordinate_type> ps(VERTICAL);
+    polygon_90_set_data<typename polygon_90_set_traits<polygon_set_type>::coordinate_type> ps(VERTICAL_);
     assign(ps, polygon_set);
     ps.get_rectangles(output);
   }
@@ -217,7 +217,7 @@ namespace boost { namespace polygon{
                        polygon_set_type>::type &
   bloat(polygon_set_type& polygon_set, orientation_2d orient,
         typename coordinate_traits<typename polygon_90_set_traits<polygon_set_type>::coordinate_type>::unsigned_area_type bloating) {
-    if(orient == orientation_2d(HORIZONTAL))
+    if(orient == orientation_2d(HORIZONTAL_))
       return bloat(polygon_set, bloating, bloating, 0, 0);
     return bloat(polygon_set, 0, 0, bloating, bloating);
   }
@@ -228,7 +228,7 @@ namespace boost { namespace polygon{
   bloat(polygon_set_type& polygon_set, orientation_2d orient,
         typename coordinate_traits<typename polygon_90_set_traits<polygon_set_type>::coordinate_type>::unsigned_area_type low_bloating,
         typename coordinate_traits<typename polygon_90_set_traits<polygon_set_type>::coordinate_type>::unsigned_area_type high_bloating) {
-    if(orient == orientation_2d(HORIZONTAL))
+    if(orient == orientation_2d(HORIZONTAL_))
       return bloat(polygon_set, low_bloating, high_bloating, 0, 0);
     return bloat(polygon_set, 0, 0, low_bloating, high_bloating);
   }
@@ -277,7 +277,7 @@ namespace boost { namespace polygon{
                        polygon_set_type>::type &
   shrink(polygon_set_type& polygon_set, orientation_2d orient,
         typename coordinate_traits<typename polygon_90_set_traits<polygon_set_type>::coordinate_type>::unsigned_area_type shrinking) {
-    if(orient == orientation_2d(HORIZONTAL))
+    if(orient == orientation_2d(HORIZONTAL_))
       return shrink(polygon_set, shrinking, shrinking, 0, 0);
     return shrink(polygon_set, 0, 0, shrinking, shrinking);
   }
@@ -288,7 +288,7 @@ namespace boost { namespace polygon{
   shrink(polygon_set_type& polygon_set, orientation_2d orient,
         typename coordinate_traits<typename polygon_90_set_traits<polygon_set_type>::coordinate_type>::unsigned_area_type low_shrinking,
         typename coordinate_traits<typename polygon_90_set_traits<polygon_set_type>::coordinate_type>::unsigned_area_type high_shrinking) {
-    if(orient == orientation_2d(HORIZONTAL))
+    if(orient == orientation_2d(HORIZONTAL_))
       return shrink(polygon_set, low_shrinking, high_shrinking, 0, 0);
     return shrink(polygon_set, 0, 0, low_shrinking, high_shrinking);
   }
@@ -363,7 +363,7 @@ namespace boost { namespace polygon{
                        polygon_set_type>::type &
   grow_and(polygon_set_type& polygon_set, orientation_2d orient,
            typename coordinate_traits<typename polygon_90_set_traits<polygon_set_type>::coordinate_type>::unsigned_area_type bloating) {
-    if(orient == orientation_2d(HORIZONTAL))
+    if(orient == orientation_2d(HORIZONTAL_))
       return grow_and(polygon_set, bloating, bloating, 0, 0);
     return grow_and(polygon_set, 0, 0, bloating, bloating);
   }
@@ -374,7 +374,7 @@ namespace boost { namespace polygon{
   grow_and(polygon_set_type& polygon_set, orientation_2d orient,
            typename coordinate_traits<typename polygon_90_set_traits<polygon_set_type>::coordinate_type>::unsigned_area_type low_bloating,
            typename coordinate_traits<typename polygon_90_set_traits<polygon_set_type>::coordinate_type>::unsigned_area_type high_bloating) {
-    if(orient == orientation_2d(HORIZONTAL))
+    if(orient == orientation_2d(HORIZONTAL_))
       return grow_and(polygon_set, low_bloating, high_bloating, 0, 0);
     return grow_and(polygon_set, 0, 0, low_bloating, high_bloating);
   }
@@ -467,7 +467,7 @@ namespace boost { namespace polygon{
                       polygon_set_type>::type &
   move(polygon_set_type& polygon_set,
   orientation_2d orient, typename polygon_90_set_traits<polygon_set_type>::coordinate_type displacement) {
-    if(orient == HORIZONTAL)
+    if(orient == HORIZONTAL_)
       return move(polygon_set, displacement, 0);
     else
       return move(polygon_set, 0, displacement);
@@ -527,9 +527,9 @@ namespace boost { namespace polygon{
       ++itr_nxt;
       rectangle_data<Unit> bbox;
       extents(bbox, *itr);
-      uat pwidth = delta(bbox, HORIZONTAL);
+      uat pwidth = delta(bbox, HORIZONTAL_);
       if(pwidth > min_width && pwidth <= max_width){
-        uat pheight = delta(bbox, VERTICAL);
+        uat pheight = delta(bbox, VERTICAL_);
         if(pheight > min_height && pheight <= max_height){
           uat parea = area(*itr);
           if(parea <= max_area && parea >= min_area) {

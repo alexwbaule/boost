@@ -28,7 +28,7 @@ namespace rectangle_formation {
     inline ScanLineToRects() : scanData_(), haveCurrentRect_(), currentRect_(), orient_(), currentCoordinate_() {}
 
     inline ScanLineToRects(orientation_2d orient, rectangle_type model) :
-      scanData_(orientation_2d(orient.to_int() ? VERTICAL : HORIZONTAL)),
+      scanData_(orientation_2d(orient.to_int() ? VERTICAL_ : HORIZONTAL_)),
       haveCurrentRect_(false), currentRect_(), orient_(orient), currentCoordinate_() {
       assign(currentRect_, model);
       currentCoordinate_ = (std::numeric_limits<coordinate_type>::max)();

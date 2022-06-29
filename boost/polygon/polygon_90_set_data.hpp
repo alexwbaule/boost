@@ -39,7 +39,7 @@ namespace boost { namespace polygon{
     typedef polygon_90_set_data operator_arg_type;
 
     // default constructor
-    inline polygon_90_set_data() : orient_(HORIZONTAL), data_(), dirty_(false), unsorted_(false) {}
+    inline polygon_90_set_data() : orient_(HORIZONTAL_), data_(), dirty_(false), unsorted_(false) {}
 
     // constructor
     inline polygon_90_set_data(orientation_2d orient) : orient_(orient), data_(), dirty_(false), unsorted_(false) {}
@@ -47,7 +47,7 @@ namespace boost { namespace polygon{
     // constructor from an iterator pair over vertex data
     template <typename iT>
     inline polygon_90_set_data(orientation_2d, iT input_begin, iT input_end) :
-      orient_(HORIZONTAL), data_(), dirty_(false), unsorted_(false) {
+      orient_(HORIZONTAL_), data_(), dirty_(false), unsorted_(false) {
       dirty_ = true;
       unsorted_ = true;
       for( ; input_begin != input_end; ++input_begin) { insert(*input_begin); }
@@ -90,7 +90,7 @@ namespace boost { namespace polygon{
     }
 
     // insert iterator range
-    inline void insert(iterator_type input_begin, iterator_type input_end, orientation_2d orient = HORIZONTAL) {
+    inline void insert(iterator_type input_begin, iterator_type input_end, orientation_2d orient = HORIZONTAL_) {
       if(input_begin == input_end || (!data_.empty() && &(*input_begin) == &(*(data_.begin())))) return;
       dirty_ = true;
       unsorted_ = true;
@@ -105,7 +105,7 @@ namespace boost { namespace polygon{
 
     // insert iterator range
     template <typename iT>
-    inline void insert(iT input_begin, iT input_end, orientation_2d orient = HORIZONTAL) {
+    inline void insert(iT input_begin, iT input_end, orientation_2d orient = HORIZONTAL_) {
       if(input_begin == input_end) return;
       dirty_ = true;
       unsorted_ = true;
@@ -119,27 +119,27 @@ namespace boost { namespace polygon{
     }
 
     inline void insert(const std::pair<std::pair<point_data<coordinate_type>, point_data<coordinate_type> >, int>& edge, bool is_hole = false,
-                       orientation_2d = HORIZONTAL) {
+                       orientation_2d = HORIZONTAL_) {
       std::pair<coordinate_type, std::pair<coordinate_type, int> > vertex;
       vertex.first = edge.first.first.x();
       vertex.second.first = edge.first.first.y();
       vertex.second.second = edge.second * (is_hole ? -1 : 1);
-      insert(vertex, false, VERTICAL);
+      insert(vertex, false, VERTICAL_);
       vertex.first = edge.first.second.x();
       vertex.second.first = edge.first.second.y();
       vertex.second.second *= -1;
-      insert(vertex, false, VERTICAL);
+      insert(vertex, false, VERTICAL_);
     }
 
     template <typename geometry_type>
-    inline void insert(const geometry_type& geometry_object, bool is_hole = false, orientation_2d = HORIZONTAL) {
+    inline void insert(const geometry_type& geometry_object, bool is_hole = false, orientation_2d = HORIZONTAL_) {
       iterator_geometry_to_set<typename geometry_concept<geometry_type>::type, geometry_type>
         begin_input(geometry_object, LOW, orient_, is_hole), end_input(geometry_object, HIGH, orient_, is_hole);
       insert(begin_input, end_input, orient_);
     }
 
     inline void insert(const std::pair<coordinate_type, std::pair<coordinate_type, int> >& vertex, bool is_hole = false,
-                       orientation_2d orient = HORIZONTAL) {
+                       orientation_2d orient = HORIZONTAL_) {
       data_.push_back(vertex);
       if(orient != orient_) std::swap(data_.back().first, data_.back().second.first);
       if(is_hole) data_.back().second.second *= -1;
@@ -330,14 +330,14 @@ namespace boost { namespace polygon{
     extents(rectangle_type& extents_rectangle) const {
       clean();
       if(data_.empty()) return false;
-      if(orient_ == HORIZONTAL)
+      if(orient_ == HORIZONTAL_)
         set_points(extents_rectangle, point_data<coordinate_type>(data_[0].second.first, data_[0].first),
                    point_data<coordinate_type>(data_[data_.size() - 1].second.first, data_[data_.size() - 1].first));
       else
         set_points(extents_rectangle, point_data<coordinate_type>(data_[0].first, data_[0].second.first),
                    point_data<coordinate_type>(data_[data_.size() - 1].first, data_[data_.size() - 1].second.first));
       for(std::size_t i = 1; i < data_.size() - 1; ++i) {
-        if(orient_ == HORIZONTAL)
+        if(orient_ == HORIZONTAL_)
           encompass(extents_rectangle, point_data<coordinate_type>(data_[i].second.first, data_[i].first));
         else
           encompass(extents_rectangle, point_data<coordinate_type>(data_[i].first, data_[i].second.first));
@@ -441,9 +441,9 @@ namespace boost { namespace polygon{
         prev_pt = current_pt;
         current_pt = next_pt;
       }
-      if(delta(extents_rectangle, HORIZONTAL) < std::abs(west_shrinking + east_shrinking))
+      if(delta(extents_rectangle, HORIZONTAL_) < std::abs(west_shrinking + east_shrinking))
         return false;
-      if(delta(extents_rectangle, VERTICAL) < std::abs(north_shrinking + south_shrinking))
+      if(delta(extents_rectangle, VERTICAL_) < std::abs(north_shrinking + south_shrinking))
         return false;
       point_data<coordinate_type> next_pt = first_pt;
       modify_pt(poly.back(), prev_pt, current_pt, next_pt, west_shrinking, east_shrinking, south_shrinking, north_shrinking);
@@ -679,7 +679,7 @@ namespace boost { namespace polygon{
     polygon_90_set_data& move(coordinate_type x_delta, coordinate_type y_delta) {
       for(typename std::vector<std::pair<coordinate_type, std::pair<coordinate_type, int> > >::iterator
             itr = data_.begin(); itr != data_.end(); ++itr) {
-        if(orient_ == orientation_2d(VERTICAL)) {
+        if(orient_ == orientation_2d(VERTICAL_)) {
           (*itr).first += x_delta;
           (*itr).second.first += y_delta;
         } else {
@@ -698,7 +698,7 @@ namespace boost { namespace polygon{
       int sign = dir1.get_sign() * dir2.get_sign();
       for(typename std::vector<std::pair<coordinate_type, std::pair<coordinate_type, int> > >::iterator
             itr = data_.begin(); itr != data_.end(); ++itr) {
-        if(orient_ == orientation_2d(VERTICAL)) {
+        if(orient_ == orientation_2d(VERTICAL_)) {
           transformation.transform((*itr).first, (*itr).second.first);
         } else {
           transformation.transform((*itr).second.first, (*itr).first);
@@ -733,7 +733,7 @@ namespace boost { namespace polygon{
     polygon_90_set_data& scale(const anisotropic_scale_factor<scaling_type>& scaling) {
       for(typename std::vector<std::pair<coordinate_type, std::pair<coordinate_type, int> > >::iterator
             itr = data_.begin(); itr != data_.end(); ++itr) {
-        if(orient_ == orientation_2d(VERTICAL)) {
+        if(orient_ == orientation_2d(VERTICAL_)) {
           scaling.scale((*itr).first, (*itr).second.first);
         } else {
           scaling.scale((*itr).second.first, (*itr).first);
@@ -746,7 +746,7 @@ namespace boost { namespace polygon{
     polygon_90_set_data& scale_with(const scaling_type& scaling) {
       for(typename std::vector<std::pair<coordinate_type, std::pair<coordinate_type, int> > >::iterator
             itr = data_.begin(); itr != data_.end(); ++itr) {
-        if(orient_ == orientation_2d(VERTICAL)) {
+        if(orient_ == orientation_2d(VERTICAL_)) {
           scaling.scale((*itr).first, (*itr).second.first);
         } else {
           scaling.scale((*itr).second.first, (*itr).first);

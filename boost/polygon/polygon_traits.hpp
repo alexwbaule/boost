@@ -641,7 +641,7 @@ namespace boost { namespace polygon{
   typename enable_if< typename is_any_mutable_polygon_type<T>::type, T>::type &
   move(T& polygon, orientation_2d orient, typename polygon_traits<T>::coordinate_type displacement) {
     typedef typename polygon_traits<T>::coordinate_type Unit;
-    if(orient == HORIZONTAL) return convolve(polygon, point_data<Unit>(displacement, Unit(0)));
+    if(orient == HORIZONTAL_) return convolve(polygon, point_data<Unit>(displacement, Unit(0)));
     return convolve(polygon, point_data<Unit>(Unit(0), displacement));
   }
 
@@ -1190,9 +1190,9 @@ namespace boost { namespace polygon{
       typedef bool result_type;
       inline less_point() {}
       inline bool operator () (const Point& pt1, const Point& pt2) const {
-        if(pt1.get(HORIZONTAL) < pt2.get(HORIZONTAL)) return true;
-        if(pt1.get(HORIZONTAL) == pt2.get(HORIZONTAL)) {
-          if(pt1.get(VERTICAL) < pt2.get(VERTICAL)) return true;
+        if(pt1.get(HORIZONTAL_) < pt2.get(HORIZONTAL_)) return true;
+        if(pt1.get(HORIZONTAL_) == pt2.get(HORIZONTAL_)) {
+          if(pt1.get(VERTICAL_) < pt2.get(VERTICAL_)) return true;
         }
         return false;
       }
@@ -1223,10 +1223,10 @@ namespace boost { namespace polygon{
                                    const Point& pt1, const Point& pt2) {
       const Point* pts[2] = {&pt1, &pt2};
       typedef typename coordinate_traits<Unit>::manhattan_area_type at;
-      at dy2 = (at)pts[1]->get(VERTICAL) - (at)y;
-      at dy1 = (at)pts[0]->get(VERTICAL) - (at)y;
-      at dx2 = (at)pts[1]->get(HORIZONTAL) - (at)x;
-      at dx1 = (at)pts[0]->get(HORIZONTAL) - (at)x;
+      at dy2 = (at)pts[1]->get(VERTICAL_) - (at)y;
+      at dy1 = (at)pts[0]->get(VERTICAL_) - (at)y;
+      at dx2 = (at)pts[1]->get(HORIZONTAL_) - (at)x;
+      at dx1 = (at)pts[0]->get(HORIZONTAL_) - (at)x;
       return equal_slope(dx1, dy1, dx2, dy2);
     }
 
@@ -1267,10 +1267,10 @@ namespace boost { namespace polygon{
       const Point* pts[2] = {&pt1, &pt2};
       //compute y value on edge from pt_ to pts[1] at the x value of pts[0]
       typedef typename coordinate_traits<Unit>::manhattan_area_type at;
-      at dy2 = (at)pts[1]->get(VERTICAL) - (at)y;
-      at dy1 = (at)pts[0]->get(VERTICAL) - (at)y;
-      at dx2 = (at)pts[1]->get(HORIZONTAL) - (at)x;
-      at dx1 = (at)pts[0]->get(HORIZONTAL) - (at)x;
+      at dy2 = (at)pts[1]->get(VERTICAL_) - (at)y;
+      at dy1 = (at)pts[0]->get(VERTICAL_) - (at)y;
+      at dx2 = (at)pts[1]->get(HORIZONTAL_) - (at)x;
+      at dx1 = (at)pts[0]->get(HORIZONTAL_) - (at)x;
       return less_slope(dx1, dy1, dx2, dy2);
     }
 
@@ -1278,8 +1278,8 @@ namespace boost { namespace polygon{
     //assumes point is on x interval of segment
     static inline int on_above_or_below(Point pt, const half_edge& he) {
       if(pt == he.first || pt == he.second) return 0;
-      if(equal_slope(pt.get(HORIZONTAL), pt.get(VERTICAL), he.first, he.second)) return 0;
-      bool less_result = less_slope(pt.get(HORIZONTAL), pt.get(VERTICAL), he.first, he.second);
+      if(equal_slope(pt.get(HORIZONTAL_), pt.get(VERTICAL_), he.first, he.second)) return 0;
+      bool less_result = less_slope(pt.get(HORIZONTAL_), pt.get(VERTICAL_), he.first, he.second);
       int retval = less_result ? -1 : 1;
       less_point lp;
       if(lp(he.second, he.first)) retval *= -1;

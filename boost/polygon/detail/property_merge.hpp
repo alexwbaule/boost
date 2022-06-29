@@ -75,7 +75,7 @@ public:
                                const property_type& property, orientation_2d_type orient) {
     for( ; input_begin != input_end; ++input_begin) {
       std::pair<property_merge_point<coordinate_type>, std::pair<property_type, int> > element;
-      if(orient == HORIZONTAL)
+      if(orient == HORIZONTAL_)
         element.first = property_merge_point<coordinate_type>((*input_begin).second.first, (*input_begin).first);
       else
         element.first = property_merge_point<coordinate_type>((*input_begin).first, (*input_begin).second.first);
@@ -562,7 +562,7 @@ private:
       if(!edge.second.first.empty()) {
         typename Result::iterator itr = result.find(edge.second.first);
         if(itr == result.end()) {
-          std::pair<property_set, polygon_set_type> element(edge.second.first, polygon_set_type(VERTICAL));
+          std::pair<property_set, polygon_set_type> element(edge.second.first, polygon_set_type(VERTICAL_));
           itr = result.insert(result.end(), element);
         }
         std::pair<interval_data<coordinate_type>, int> element2(interval_data<coordinate_type>(edge.first.low(), edge.first.high()), -1); //right edge of figure
@@ -572,7 +572,7 @@ private:
         //edge.second.second is the property set on the right of the edge
         typename Result::iterator itr = result.find(edge.second.second);
         if(itr == result.end()) {
-          std::pair<property_set, polygon_set_type> element(edge.second.second, polygon_set_type(VERTICAL));
+          std::pair<property_set, polygon_set_type> element(edge.second.second, polygon_set_type(VERTICAL_));
           itr = result.insert(result.end(), element);
         }
         std::pair<interval_data<coordinate_type>, int> element3(interval_data<coordinate_type>(edge.first.low(), edge.first.high()), 1); //left edge of figure

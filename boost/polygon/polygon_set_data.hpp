@@ -219,7 +219,7 @@ namespace boost { namespace polygon {
         assign(p0, *vertex0);
         assign(p1, *vertex1);
         if (p0 != p1) {
-          int hmultiplier = (p0.get(HORIZONTAL) == p1.get(HORIZONTAL)) ? -1 : 1;
+          int hmultiplier = (p0.get(HORIZONTAL_) == p1.get(HORIZONTAL_)) ? -1 : 1;
           element_type elem(edge_type(p0, p1), hmultiplier * wmultiplier);
           insert_clean(elem);
         }
@@ -256,7 +256,7 @@ namespace boost { namespace polygon {
     // append to the container cT with polygons of three or four verticies
     template <class cT>
     void get_trapezoids(cT& container, orientation_2d slicing_orientation) const {
-      if(slicing_orientation == VERTICAL) {
+      if(slicing_orientation == VERTICAL_) {
         get_trapezoids(container);
       } else {
         polygon_set_data<T> ps(*this);
@@ -499,9 +499,9 @@ namespace boost { namespace polygon {
         prev_pt = current_pt;
         current_pt = next_pt;
       }
-      if(delta(extents_rectangle, HORIZONTAL) <= std::abs(2*distance))
+      if(delta(extents_rectangle, HORIZONTAL_) <= std::abs(2*distance))
         return false;
-      if(delta(extents_rectangle, VERTICAL) <= std::abs(2*distance))
+      if(delta(extents_rectangle, VERTICAL_) <= std::abs(2*distance))
         return false;
       point_data<coordinate_type> next_pt = first_pt;
       modify_pt(poly[poly.size()-2], prev_pt, current_pt, next_pt, distance, multiplier);
@@ -758,8 +758,8 @@ namespace boost { namespace polygon {
       bool is_45 = false;
       for(iterator_type itr = begin(); itr != end(); ++itr) {
         const element_type& elem = *itr;
-        delta_type h_delta = euclidean_distance(elem.first.first, elem.first.second, HORIZONTAL);
-        delta_type v_delta = euclidean_distance(elem.first.first, elem.first.second, VERTICAL);
+        delta_type h_delta = euclidean_distance(elem.first.first, elem.first.second, HORIZONTAL_);
+        delta_type v_delta = euclidean_distance(elem.first.first, elem.first.second, VERTICAL_);
         if(h_delta != 0 || v_delta != 0) {
           //neither delta is zero and the edge is not MANHATTAN
           if(v_delta != h_delta && v_delta != -h_delta) return POLYGON_SET_CONCEPT;

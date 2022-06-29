@@ -352,7 +352,7 @@ namespace polygon_formation {
         //if it is a hole and orientation is vertical or it is not a hole and orientation is horizontal
         //we want to use this active tail, otherwise we want to use the other active tail
         startEnd_ = TAIL;
-        if(!isHole ^ (orient == HORIZONTAL)) {
+        if(!isHole ^ (orient == HORIZONTAL_)) {
           //switch winding direction
           at = at->getOtherActiveTail();
         }
@@ -363,7 +363,7 @@ namespace polygon_formation {
         if(at->getTail()->numSegments() > 0)
          index_ = at->getTail()->numSegments() - 1;
 
-        if((at->getOrient() == HORIZONTAL) ^ (orient == HORIZONTAL)) {
+        if((at->getOrient() == HORIZONTAL_) ^ (orient == HORIZONTAL_)) {
           pLineEnd_ = at->getTail();
           indexEnd_ = pLineEnd_->numSegments() - 1;
           if(index_ == 0) {
@@ -550,7 +550,7 @@ namespace polygon_formation {
     /*
      * write the figure that this active tail points to out through iterators
      */
-    void writeOutFigureItrs(iterator& beginOut, iterator& endOut, bool isHole = false, orientation_2d orient = VERTICAL) const;
+    void writeOutFigureItrs(iterator& beginOut, iterator& endOut, bool isHole = false, orientation_2d orient = VERTICAL_) const;
     iterator begin(bool isHole, orientation_2d orient) const;
     iterator end() const;
 
@@ -608,7 +608,7 @@ namespace polygon_formation {
     inline PolyLineHoleData() : p_(0) {}
     inline PolyLineHoleData(ActiveTail<Unit>* p) : p_(p) {}
     //use default copy and assign
-    inline compact_iterator_type begin_compact() const { return p_->begin(true, (orientT ? VERTICAL : HORIZONTAL)); }
+    inline compact_iterator_type begin_compact() const { return p_->begin(true, (orientT ? VERTICAL_ : HORIZONTAL_)); }
     inline compact_iterator_type end_compact() const { return p_->end(); }
     inline iterator_type begin() const { return iterator_type(begin_compact(), end_compact()); }
     inline iterator_type end() const { return iterator_type(end_compact(), end_compact()); }
@@ -657,7 +657,7 @@ namespace polygon_formation {
     inline PolyLinePolygonWithHolesData() : p_(0) {}
     inline PolyLinePolygonWithHolesData(ActiveTail<Unit>* p) : p_(p) {}
     //use default copy and assign
-    inline compact_iterator_type begin_compact() const { return p_->begin(false, (orientT ? VERTICAL : HORIZONTAL)); }
+    inline compact_iterator_type begin_compact() const { return p_->begin(false, (orientT ? VERTICAL_ : HORIZONTAL_)); }
     inline compact_iterator_type end_compact() const { return p_->end(); }
     inline iterator_type begin() const { return iterator_type(begin_compact(), end_compact()); }
     inline iterator_type end() const { return iterator_type(end_compact(), end_compact()); }
@@ -900,12 +900,12 @@ namespace polygon_formation {
 
   template <typename Unit>
   inline orientation_2d PolyLine<Unit>::tailOrient() const {
-    return (verticalTail() ? VERTICAL : HORIZONTAL);
+    return (verticalTail() ? VERTICAL_ : HORIZONTAL_);
   }
 
   template <typename Unit>
   inline orientation_2d PolyLine<Unit>::headOrient() const {
-    return (verticalHead() ? VERTICAL : HORIZONTAL);
+    return (verticalHead() ? VERTICAL_ : HORIZONTAL_);
   }
 
   template <typename Unit>
@@ -966,12 +966,12 @@ namespace polygon_formation {
      if(numSegments()){
        point_data<Unit> endPt = getEndPoint();
        //vertical is true, horizontal is false
-       if((tailOrient().to_int() ? point.get(VERTICAL) == endPt.get(VERTICAL) : point.get(HORIZONTAL) == endPt.get(HORIZONTAL))) {
+       if((tailOrient().to_int() ? point.get(VERTICAL_) == endPt.get(VERTICAL_) : point.get(HORIZONTAL_) == endPt.get(HORIZONTAL_))) {
          //we were pushing a colinear segment
          return popCoordinate();
        }
      }
-    return pushCoordinate(tailOrient().to_int() ? point.get(VERTICAL) : point.get(HORIZONTAL));
+    return pushCoordinate(tailOrient().to_int() ? point.get(VERTICAL_) : point.get(HORIZONTAL_));
   }
 
   template <typename Unit>
@@ -1047,15 +1047,15 @@ namespace polygon_formation {
 
   template <typename Unit>
   inline orientation_2d PolyLine<Unit>::segmentOrient(unsigned int index) const {
-    return (to_bool((unsigned int)verticalHead() ^ (index % 2)) ? VERTICAL : HORIZONTAL);
+    return (to_bool((unsigned int)verticalHead() ^ (index % 2)) ? VERTICAL_ : HORIZONTAL_);
   }
 
   template <typename Unit>
   inline point_data<Unit> PolyLine<Unit>::getPoint(unsigned int index) const {
     //assert(isValid() && headp_->isValid()) ("PolyLine: headp_ must be valid");
     point_data<Unit> pt;
-    pt.set(HORIZONTAL, ptdata_[index]);
-    pt.set(VERTICAL, ptdata_[index]);
+    pt.set(HORIZONTAL_, ptdata_[index]);
+    pt.set(VERTICAL_, ptdata_[index]);
     Unit prevCoord;
     if(index == 0) {
       prevCoord = headp_->getEndCoord(headToTail());
@@ -1131,7 +1131,7 @@ namespace polygon_formation {
 
   template <typename Unit>
   inline bool ActiveTail<Unit>::operator<(const ActiveTail<Unit>& b) const {
-    return tailp_->getEndPoint().get(VERTICAL) < b.tailp_->getEndPoint().get(VERTICAL);
+    return tailp_->getEndPoint().get(VERTICAL_) < b.tailp_->getEndPoint().get(VERTICAL_);
   }
 
   template <typename Unit>
@@ -1187,20 +1187,20 @@ namespace polygon_formation {
     }
     ActiveTail<Unit>* h, *v;
     ActiveTail<Unit>* other = hole->getOtherActiveTail();
-    if(other->getOrient() == VERTICAL) {
-      //assert that hole.getOrient() == HORIZONTAL
+    if(other->getOrient() == VERTICAL_) {
+      //assert that hole.getOrient() == HORIZONTAL_
       //this case should never happen
       h = hole;
       v = other;
     } else {
-      //assert that hole.getOrient() == VERTICAL
+      //assert that hole.getOrient() == VERTICAL_
       h = other;
       v = hole;
     }
     h->pushCoordinate(v->getCoordinate());
-    //assert that h->getOrient() == VERTICAL
+    //assert that h->getOrient() == VERTICAL_
     //v->pushCoordinate(getCoordinate());
-    //assert that v->getOrient() == VERTICAL
+    //assert that v->getOrient() == VERTICAL_
     //I can't close a figure by adding a hole, so pass zero for xMin and yMin
     std::vector<Unit> tmpVec;
     ActiveTail<Unit>::joinChains(this, h, false, tmpVec);
@@ -1237,8 +1237,8 @@ namespace polygon_formation {
   inline void ActiveTail<Unit>::pushCoordinate(Unit coord) {
     //appropriately handle any co-linear polyline segments by calling push point internally
     point_data<Unit> p;
-    p.set(HORIZONTAL, coord);
-    p.set(VERTICAL, coord);
+    p.set(HORIZONTAL_, coord);
+    p.set(VERTICAL_, coord);
     //if we are vertical assign the last coordinate (an X) to p.x, else to p.y
     p.set(getOrient().get_perpendicular(), getCoordinate());
     int oldSegments = tailp_->numSegments();
@@ -1332,7 +1332,7 @@ namespace polygon_formation {
       nextPolyLinep = tailp_->writeOut(outVec);
     }
     Unit firsty = outVec[size + 1];
-    if((getOrient() == HORIZONTAL) ^ !isHole) {
+    if((getOrient() == HORIZONTAL_) ^ !isHole) {
       //our first coordinate is a y value, so we need to rotate it to the end
       typename std::vector<Unit>::iterator tmpItr = outVec.begin();
       tmpItr += size;
@@ -1345,7 +1345,7 @@ namespace polygon_formation {
       nextPolyLinep = nextPolyLinep->writeOut(outVec, startEnd);
       startEnd = nextStartEnd;
     }
-    if((getOrient() == HORIZONTAL) ^ !isHole) {
+    if((getOrient() == HORIZONTAL_) ^ !isHole) {
       //we want to push the y value onto the end since we ought to have ended with an x
       outVec.push_back(firsty); //should never be executed because we want first value to be an x
     }
@@ -1508,8 +1508,8 @@ namespace polygon_formation {
     if(!phole || !fractureHoles){
       at1 = createActiveTail<Unit>();
       at2 = createActiveTail<Unit>();
-      (*at1) = ActiveTail<Unit>(VERTICAL, x, solid, at2);
-      (*at2) = ActiveTail<Unit>(HORIZONTAL, y, !solid, at1);
+      (*at1) = ActiveTail<Unit>(VERTICAL_, x, solid, at2);
+      (*at2) = ActiveTail<Unit>(HORIZONTAL_, y, !solid, at1);
       //provide a function through activeTail class to provide this
       at1->getTail()->joinHeadToHead(*(at2->getTail()));
 
@@ -1522,7 +1522,7 @@ namespace polygon_formation {
     }
     //assert phole is not null
     //assert fractureHoles is true
-    if(phole->getOrient() == VERTICAL) {
+    if(phole->getOrient() == VERTICAL_) {
       at2 = phole;
     } else {
       at2 = phole->getOtherActiveTail(); //should never be executed since orientation is expected to be vertical
@@ -2044,7 +2044,7 @@ namespace polygon_formation {
             currentTail = tail;
             currentTail->pushCoordinate(currentX);
           }
-          //assert currentTail->getOrient() == VERTICAL
+          //assert currentTail->getOrient() == VERTICAL_
           nextMapItr = thisMapItr; //set nextMapItr to the next position after this one
           ++nextMapItr;
           //remove thisMapItr from the map
@@ -2144,7 +2144,7 @@ namespace polygon_formation {
         } else {
           //currentTail must turn right and be added into the map
           currentTail->pushCoordinate(edge.get(HIGH));
-          //assert currentTail->getOrient() == HORIZONTAL
+          //assert currentTail->getOrient() == HORIZONTAL_
           tailMap_.insert(nextMapItr, std::pair<Unit, ActiveTail<Unit>*>(edge.get(HIGH), currentTail));
           //set currentTail to null
           currentTail = 0;
@@ -2214,7 +2214,7 @@ namespace polygon_formation {
         itr != end; ++ itr) {
       coordinate_type pos = (*itr).first;
       if(pos != prevPos) {
-        if(orient == VERTICAL) {
+        if(orient == VERTICAL_) {
           typename polygon_formation::ScanLineToPolygonItrs<true, coordinate_type, polygon_concept_type>::iterator itrPoly, itrPolyEnd;
            scanlineToPolygonItrsV.processEdges(itrPoly, itrPolyEnd, prevPos,
                leftEdges, rightEdges, sliceThreshold);
@@ -2261,7 +2261,7 @@ namespace polygon_formation {
       prevY = y;
       count += (*itr).second.second;
     }
-    if(orient == VERTICAL) {
+    if(orient == VERTICAL_) {
       typename polygon_formation::ScanLineToPolygonItrs<true, coordinate_type, polygon_concept_type>::iterator itrPoly, itrPolyEnd;
       scanlineToPolygonItrsV.processEdges(itrPoly, itrPolyEnd, prevPos, leftEdges, rightEdges, sliceThreshold);
       for( ; itrPoly != itrPolyEnd; ++ itrPoly) {

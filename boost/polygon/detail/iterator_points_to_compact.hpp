@@ -24,7 +24,7 @@ public:
 
   inline iterator_points_to_compact() : iter_(), iterEnd_(), orient_(), coord_() {}
   inline iterator_points_to_compact(iT iter, iT iterEnd) : 
-    iter_(iter), iterEnd_(iterEnd), orient_(HORIZONTAL), coord_() {}
+    iter_(iter), iterEnd_(iterEnd), orient_(HORIZONTAL_), coord_() {}
   inline iterator_points_to_compact(const iterator_points_to_compact& that) : 
     iter_(that.iter_), iterEnd_(that.iterEnd_), orient_(that.orient_), coord_(that.coord_) {}
   //use bitwise copy and assign provided by the compiler
