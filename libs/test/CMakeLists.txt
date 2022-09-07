@@ -1,6 +1,6 @@
 
-set(SRC compiler_log_formatter.cpp
-		cpp_main.cpp
+set(SRCS compiler_log_formatter.cpp
+		#cpp_main.cpp
 		debug.cpp
 		decorator.cpp
 		execution_monitor.cpp
@@ -23,8 +23,10 @@ set(SRC compiler_log_formatter.cpp
 		)
 		
 
-__add_real_target(boost_test lib SOURCE ${SRC}
+__add_real_target(boost_test lib SOURCE ${SRCS}
 									  INC ${CMAKE_CURRENT_SOURCE_DIR}/../../
 									  DEF BOOST_ALL_NO_LIB
-									  INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../)
+									  INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../
+									  INTERFACE_DEF BOOST_ALL_NO_LIB
+									  )
 									  
