@@ -1,5 +1,3 @@
-add_definitions(-DBOOST_ALL_NO_LIB)
-add_definitions(-DBOOST_THREAD_BUILD_DLL)
 
 set(SRC compiler_log_formatter.cpp
 		cpp_main.cpp
@@ -25,8 +23,8 @@ set(SRC compiler_log_formatter.cpp
 		)
 		
 
-__add_real_target(boost_test dll SOURCE ${SRC}
+__add_real_target(boost_test lib SOURCE ${SRC}
 									  INC ${CMAKE_CURRENT_SOURCE_DIR}/../../
-									  DEF BOOST_ALL_DYN_LINK
+									  DEF BOOST_ALL_NO_LIB
 									  INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../)
 									  
