@@ -50,7 +50,7 @@ set(SRC attribute_name.cpp
 		setup/settings_parser.cpp
 		)
 
-set(LIBS boost_file_system boost_regex boost_thread)
+set(LIBS boost_filesystem boost_regex boost_thread)
 set(DEFS)
 		
 if(WIN32)
