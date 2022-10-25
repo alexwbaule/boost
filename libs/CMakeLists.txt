@@ -3,7 +3,7 @@ __install_inc_directory(${CMAKE_CURRENT_SOURCE_DIR}/../boost)
 set(boost_includes ${CMAKE_CURRENT_SOURCE_DIR}/../)
 include_directories(${boost_includes})
 
-if(CC_BC_EMCC OR CC_BC_LINUX)
+if(CC_BC_EMCC OR CC_BC_LINUX OR CC_BC_MAC)
 	add_subdirectory(chrono)
 	add_subdirectory(file_system)
 	add_subdirectory(iostreams)
