@@ -2,10 +2,10 @@ set(BOOST_IOSTREAMS_SOURCE file_descriptor.cpp mapped_file.cpp
 							)
 
 set(LIBS)
-__cc_find(Zlib)
-if(TARGET zlib)
+__cc_find(zlib_static)
+if(TARGET zlib_static)
 	list(APPEND BOOST_IOSTREAMS_SOURCE zlib.cpp)
-	list(APPEND LIBS zlib)
+	list(APPEND LIBS zlib_static)
 endif()
 __cc_find(Zstd)
 if(TARGET zstd)
