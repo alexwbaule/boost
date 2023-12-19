@@ -45,12 +45,23 @@ set(SRC
 set(LIBS)
 set(DEFS)
 
-__add_real_target(boost_serialization dll SOURCE ${SRC}
+if(CC_GLOBAL_FORCE_STATIC OR BOOST_SERIALIZATION_STATIC)
+	__add_real_target(boost_serialization lib SOURCE ${SRCS} 
+									LIB ${LIBS}
+									INC ${INCS}
+									DEF ${DEFS}
+									INTERFACE ${INTERFACES}
+									)
+	set_property(TARGET boost_serialization PROPERTY INTERFACE_COMPILE_DEFINITIONS BOOST_ALL_NO_LIB)
+else()
+	__add_real_target(boost_serialization dll SOURCE ${SRC}
 									  INC ${CMAKE_CURRENT_SOURCE_DIR}/../../
 									  DEF ${DEFS} BOOST_ALL_DYN_LINK
 									  LIB ${LIBS}
 									  INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../)
-									  
+	set_property(TARGET boost_serialization PROPERTY INTERFACE_COMPILE_DEFINITIONS BOOST_ALL_DYN_LINK BOOST_ALL_NO_LIB)
+endif()
+							  
 if(INSTALL_BOOST)
 	INSTALL(TARGETS boost_log
 				LIBRARY DESTINATION lib
